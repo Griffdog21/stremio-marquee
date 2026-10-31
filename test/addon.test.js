@@ -69,9 +69,15 @@ test('metas: generated art, original posters and per-title swaps', () => {
   assert.equal(generated[0].posterShape, 'poster');
   const original = toMetas({ row: { ...row, shape: 'landscape' }, items, cfg: normalizeConfig({ art: 'original' }), artUrl });
   assert.equal(original[0].poster, 'https://img/b.jpg', 'widescreen original cards use the backdrop');
-  assert.equal(original[1].poster, 'https://img/p2.jpg', 'falls back to the poster without a backdrop');
   const sharp = toMetas({ row, items: [{ ...items[0], poster: 'https://images.metahub.space/poster/small/tt0083658/img' }], cfg: normalizeConfig({ art: 'original' }), artUrl });
   assert.equal(sharp[0].poster, 'https://images.metahub.space/poster/medium/tt0083658/img', 'real posters use the sharper size');
+  // Real posters are never replaced, except where a title has none.
+  const missing = 'https://img/p2.jpg';
+  const fallback = toMetas({ row, items, cfg: normalizeConfig({ art: 'original' }), artUrl, hasImage: (u) => u !== missing });
+  assert.equal(fallback[0].poster, 'https://img/p.jpg');
+  assert.equal(fallback[1].poster, 'https://art/poster/tt0111161.jpg', 'missing poster → generated art');
+  const noBackdrop = toMetas({ row: { ...row, shape: 'landscape' }, items, cfg: normalizeConfig({ art: 'original' }), artUrl });
+  assert.equal(noBackdrop[1].poster, 'https://art/landscape/tt0111161.jpg', 'no backdrop → generated wide art, not a stretched poster');
 });
 
 test('art tokens round-trip unicode titles', () => {

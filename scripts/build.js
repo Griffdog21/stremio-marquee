@@ -15,7 +15,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { THEMES, getTheme } from '../src/core/themes.js';
 import { normalizeConfig, encodeConfig } from '../src/core/config.js';
-import { buildManifest, resolveRows, toMetas, defaultName, SHAPE_CODES } from '../src/core/addon.js';
+import { buildManifest, resolveRows, toMetas, realImage, defaultName, SHAPE_CODES } from '../src/core/addon.js';
+import { checkImages } from '../src/node/images.js';
 import { renderArt, renderLogo, renderBackdrop } from '../src/core/art/index.js';
 import { renderBoard } from '../src/core/board.js';
 import { enhancedTheme, stylusTheme } from '../src/core/css-theme.js';
@@ -131,12 +132,15 @@ async function buildAddon({ pool, jobs, name, cfg, variant, slug = '', assetsFro
     const items = (await loadRowItems(row)).slice(0, cfg.count);
     loaded.push({ row, items });
     const artUrl = (it, shape) => `${base}/art/${SHAPE_CODES[shape]}/${it.id}.${IMAGE_EXT}`;
+    // Real-poster add-ons only draw art for titles whose poster is missing.
+    const real = cfg.art === 'original';
+    const hasImage = real ? await checkImages(items.map((it) => realImage(it, row.shape))) : () => true;
+    const needsArt = (it) => !cfg.posters[it.id] && (!real || !realImage(it, row.shape) || !hasImage(realImage(it, row.shape)));
     // Art is regenerated daily, so keep client caches shorter than a rebuild cycle.
-    json(`${dir}/catalog/${row.type}/${row.catalogId}.json`, { metas: toMetas({ row, items, cfg, artUrl }), cacheMaxAge: 14400 });
-    if (cfg.art === 'original') continue;
+    json(`${dir}/catalog/${row.type}/${row.catalogId}.json`, { metas: toMetas({ row, items, cfg, artUrl, hasImage }), cacheMaxAge: 14400 });
     for (const it of items) {
       const key = `${row.shape}:${it.id}`;
-      if (cfg.posters[it.id] || seen.has(key)) continue;
+      if (!needsArt(it) || seen.has(key)) continue;
       seen.add(key);
       jobs.push(pool.run(renderArt({ template, palette, item: it, shape: row.shape }), path.join(DIST, dir, 'art', SHAPE_CODES[row.shape], `${it.id}.${IMAGE_EXT}`)));
     }

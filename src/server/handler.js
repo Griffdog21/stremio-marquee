@@ -5,7 +5,8 @@ import { readFile, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { normalizeConfig, decodeConfig } from '../core/config.js';
-import { buildManifest, resolveRows, toMetas, artToken, parseArtToken, SHAPE_CODES, SHAPE_FROM_CODE } from '../core/addon.js';
+import { buildManifest, resolveRows, toMetas, realImage, artToken, parseArtToken, SHAPE_CODES, SHAPE_FROM_CODE } from '../core/addon.js';
+import { checkImages } from '../node/images.js';
 import { renderArt, renderLogo, renderBackdrop } from '../core/art/index.js';
 import { getTheme } from '../core/themes.js';
 import { loadRowItems } from '../node/sources.js';
@@ -106,9 +107,11 @@ export function createHandler({ publicUrl } = {}) {
         const id = String(rawId || '').replace(/\.json$/, '');
         const row = resolveRows(cfg).find((r) => r.catalogId === id && r.type === type);
         if (!row) return sendJson(res, { metas: [] }, 60);
-        const items = await loadRowItems(row);
+        const items = (await loadRowItems(row)).slice(0, cfg.count);
         const artUrl = (it, shape) => `${base}/art/${SHAPE_CODES[shape]}/${artToken(it)}.${IMAGE_EXT}`;
-        return sendJson(res, { metas: toMetas({ row, items, cfg, artUrl }), cacheMaxAge: 21600, staleRevalidate: 86400 }, 21600);
+        // Real-poster setups fall back to generated art only where a poster is missing.
+        const hasImage = cfg.art === 'original' ? await checkImages(items.map((it) => realImage(it, row.shape))) : undefined;
+        return sendJson(res, { metas: toMetas({ row, items, cfg, artUrl, hasImage }), cacheMaxAge: 21600, staleRevalidate: 86400 }, 21600);
       }
       if (resource === 'logo.png') {
         return image(res, `${base}/logo.png`, () => svgToPng(renderLogo({ palette, template, size: 256 })));

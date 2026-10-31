@@ -9,7 +9,8 @@ const params = new URLSearchParams(location.search);
 const october = new Date().getMonth() === 9;
 let current = params.get('theme') || store.get('theme', seasonalTheme());
 if (!THEMES.some((t) => t.id === current)) current = seasonalTheme();
-let real = params.has('posters') ? params.get('posters') === 'real' : store.get('real-posters', false);
+// Real posters by default; generated art is the opt-in.
+let real = params.has('posters') ? params.get('posters') !== 'art' : store.get('real-posters', true);
 
 const $ = (id) => document.getElementById(id);
 const json = (url) => fetch(url).then((r) => (r.ok ? r.json() : null)).catch(() => null);
@@ -27,7 +28,7 @@ for (const t of THEMES) {
       h('div', { class: 'swatches', 'aria-hidden': 'true' },
         ...['bg', 'surface', 'primary', 'secondary', 'accent'].map((k) => h('i', { style: `background:${t.palette[k]}` }))),
       h('div', { class: 'btn-row' },
-        h('a', { class: 'btn small', href: stremioLink(presetManifest(info.base, t.id)) }, 'Install'),
+        h('a', { class: 'btn small card-install', 'data-theme': t.id, href: stremioLink(presetManifest(info.base, t.id, real)) }, 'Install'),
         h('a', { class: 'btn small ghost', href: `studio.html?theme=${t.id}` }, 'Customize')))));
 }
 
@@ -81,23 +82,24 @@ function select(id, jump = false) {
   $('posters-art').setAttribute('aria-pressed', String(!real));
   $('posters-real').setAttribute('aria-pressed', String(real));
   $('posters-hint').textContent = real
-    ? `Stremio's official artwork, with ${theme.name}'s rows, collection and widescreen spotlight.`
+    ? `The official posters, with ${theme.name}'s rows, collection and widescreen spotlight. Generated art only fills in where a title has no poster.`
     : 'Every poster drawn in the theme\'s style.';
+  document.querySelectorAll('.card-install').forEach((a) => { a.href = stremioLink(presetManifest(info.base, a.dataset.theme, real)); });
   showOnTv(id);
 
   const manifest = presetManifest(info.base, id, real);
   $('install-app').href = stremioLink(manifest);
   $('install-web').href = webInstallLink(manifest);
   $('install-url').textContent = manifest;
-  $('qr').innerHTML = qrSvg(`${info.base}/?theme=${id}${real ? '&posters=real' : ''}#install`);
+  $('qr').innerHTML = qrSvg(`${info.base}/?theme=${id}${real ? '' : '&posters=art'}#install`);
   $('dl-enhanced').href = `themes/${id}.theme.css`;
   $('dl-enhanced').setAttribute('download', `marquee-${id}.theme.css`);
   $('dl-stylus').href = `themes/${id}.user.css`;
 
   const url = new URL(location.href);
   url.searchParams.set('theme', id);
-  if (real) url.searchParams.set('posters', 'real');
-  else url.searchParams.delete('posters');
+  if (real) url.searchParams.delete('posters');
+  else url.searchParams.set('posters', 'art');
   history.replaceState(null, '', url);
   if (jump) $('install').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
 }

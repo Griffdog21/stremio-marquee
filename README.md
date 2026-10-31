@@ -31,7 +31,7 @@
 Stremio add-ons can't repaint the app itself, but they **can** fill your home screen with rows, posters, images and text. Marquee turns that into a theme engine:
 
 - 🎨 **Generated poster art** in eight distinct styles, rendered as plain JPEGs so every Stremio app shows them, from Google TV and Android TV to iOS, desktop and web.
-- 🖼️ **Or real posters**: every theme also comes as a real-poster edition with the same rows, collection and spotlight but the official artwork (sharper than Stremio's default size).
+- 🖼️ **Real posters by default**: every theme comes as a real-poster edition (the default on the site) with the official artwork in a sharper size; generated art only fills in for titles that have no poster.
 - 🎬 **Widescreen spotlight rows**: a cinematic, Netflix-style hero row of 16:9 cards built from each theme's hand-picked collection.
 - 🎞️ **Curated collections** per theme (*Neon Nights*, *Shadows & Smoke*, *Midnight Monsters*…) plus a genre **mood row**.
 - 🧑‍🎨 **The Studio**: mix any palette with any art style, rename and reshape rows, name your add-on, swap in your **own poster images**, set your own logo and backdrop, build rows from your favourite titles, and watch it all live on a virtual TV. Then **publish it free** to GitHub Pages, no server required.

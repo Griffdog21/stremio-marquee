@@ -99,13 +99,24 @@ export function buildManifest({ cfg, base, variant = 'stock', slug = '', token =
 // Cinemeta lists "small" posters; "medium" is noticeably sharper on a TV.
 const sharper = (url) => (url ? url.replace('images.metahub.space/poster/small/', 'images.metahub.space/poster/medium/') : url);
 
-export function toMetas({ row, items, cfg, artUrl }) {
+/** The real image a card would show in 'original' mode (or '' if the title has none). */
+export function realImage(it, shape) {
+  return (shape === 'landscape' ? it.background : sharper(it.poster)) || '';
+}
+
+/**
+ * hasImage(url): optional check that a real poster actually exists. In
+ * 'original' mode, generated art only fills in for titles without one.
+ */
+export function toMetas({ row, items, cfg, artUrl, hasImage = () => true }) {
   return items.slice(0, cfg.count).map((it) => {
     const shape = row.shape;
     let poster;
     if (cfg.posters[it.id]) poster = cfg.posters[it.id];
-    else if (cfg.art === 'original') poster = shape === 'landscape' ? it.background || sharper(it.poster) : sharper(it.poster);
-    else poster = artUrl(it, shape);
+    else if (cfg.art === 'original') {
+      const real = realImage(it, shape);
+      poster = real && hasImage(real) ? real : artUrl(it, shape);
+    } else poster = artUrl(it, shape);
     const m = { id: it.id, type: it.type || row.type, name: it.name, poster, posterShape: shape };
     if (it.background) m.background = it.background;
     if (it.logo) m.logo = it.logo;

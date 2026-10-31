@@ -238,7 +238,7 @@ function renderInstall(cfg) {
   if (stock) {
     $('install-stock').replaceChildren(
       h('p', {}, h('b', {}, `This is the stock ${theme.name} theme${real ? ' with real posters' : ''}.`), ' It\'s hosted free and refreshed daily, with nothing to set up. Change anything and it becomes your own add-on.'),
-      installButtons(presetManifest(info.base, cfg.theme, real), `${info.base}/?theme=${cfg.theme}${real ? '&posters=real' : ''}#install`));
+      installButtons(presetManifest(info.base, cfg.theme, real), `${info.base}/?theme=${cfg.theme}${real ? '' : '&posters=art'}#install`));
     return;
   }
   updatePublish(cfg);
