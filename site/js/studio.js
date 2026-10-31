@@ -1,6 +1,6 @@
 // The Marquee Studio: edit a configuration and watch it on a virtual TV. The
 // preview is drawn by the very same art engine the addon uses (src/core).
-import { THEMES, getTheme, PALETTE_KEYS } from '../core/themes.js';
+import { THEMES, TEMPLATES, getTheme, PALETTE_KEYS } from '../core/themes.js';
 import { normalizeConfig, encodeConfig, exportConfig, decodeConfig, BUILTIN_ROWS, CARD_SHAPES } from '../core/config.js';
 import { resolveRows, rowDefs } from '../core/addon.js';
 import { renderBoard } from '../core/board.js';
@@ -282,7 +282,7 @@ function buildThemeChips() {
 function buildArt() {
   const sel = $('template');
   sel.replaceChildren(h('option', { value: '' }, 'Theme default'),
-    ...THEMES.map((t) => h('option', { value: t.template, selected: state.template === t.template }, `${t.name} art`)));
+    ...Object.entries(TEMPLATES).map(([id, t]) => h('option', { value: id, selected: state.template === id }, t.name)));
   sel.value = state.template || '';
   $('art').value = state.art;
 }

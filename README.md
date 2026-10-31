@@ -2,7 +2,7 @@
   <a href="https://griffdog21.github.io/stremio-marquee/"><img src="docs/banner.svg" alt="Marquee: themes for Stremio" width="100%"></a>
 </p>
 
-<h3 align="center">Eight cinematic themes for Stremio, on every screen. Google TV included.</h3>
+<h3 align="center">25 cinematic themes for Stremio, on every screen. Google TV included.</h3>
 
 <p align="center">
   Widescreen spotlight rows · curated collections · your real posters, or optional theme art · your own images · matching desktop themes
@@ -41,15 +41,15 @@ Stremio add-ons can't repaint the app itself, but they **can** fill your home sc
 <table>
   <tr>
     <td width="50%"><a href="https://griffdog21.github.io/stremio-marquee/?theme=neon#install"><img src="docs/themes/neon.jpg" alt="Midnight Neon"></a><br><b>🌆 Midnight Neon</b><br><sub>Synthwave suns, laser grids and hot-pink glow.</sub></td>
-    <td width="50%"><a href="https://griffdog21.github.io/stremio-marquee/?theme=noir#install"><img src="docs/themes/noir.jpg" alt="Film Noir"></a><br><b>🎞️ Film Noir</b><br><sub>Venetian-blind shadows, cigarette smoke and one red accent.</sub></td>
+    <td width="50%"><a href="https://griffdog21.github.io/stremio-marquee/?theme=sakura#install"><img src="docs/themes/sakura.jpg" alt="Sakura"></a><br><b>🌸 Sakura</b><br><sub>Cherry blossom on washi paper, petals drifting by.</sub></td>
   </tr>
   <tr>
-    <td><a href="https://griffdog21.github.io/stremio-marquee/?theme=deco#install"><img src="docs/themes/deco.jpg" alt="Gilded Age"></a><br><b>✨ Gilded Age</b><br><sub>Art-deco sunbursts, stepped frames and liquid gold.</sub></td>
-    <td><a href="https://griffdog21.github.io/stremio-marquee/?theme=vhs#install"><img src="docs/themes/vhs.jpg" alt="Rewind VHS"></a><br><b>📼 Rewind VHS</b><br><sub>Rainbow-stripe tape labels, tracking glitches, Sharpie titles.</sub></td>
+    <td><a href="https://griffdog21.github.io/stremio-marquee/?theme=noir#install"><img src="docs/themes/noir.jpg" alt="Film Noir"></a><br><b>🎞️ Film Noir</b><br><sub>Venetian-blind shadows, cigarette smoke and one red accent.</sub></td>
+    <td><a href="https://griffdog21.github.io/stremio-marquee/?theme=western#install"><img src="docs/themes/western.jpg" alt="High Noon"></a><br><b>🤠 High Noon</b><br><sub>Wanted posters, desert mesas and dusty gold.</sub></td>
   </tr>
   <tr>
-    <td><a href="https://griffdog21.github.io/stremio-marquee/?theme=bauhaus#install"><img src="docs/themes/bauhaus.jpg" alt="Bauhaus"></a><br><b>🔴 Bauhaus</b><br><sub>Primary colours, pure geometry, lowercase type.</sub></td>
-    <td><a href="https://griffdog21.github.io/stremio-marquee/?theme=terminal#install"><img src="docs/themes/terminal.jpg" alt="Phosphor"></a><br><b>💾 Phosphor</b><br><sub>Green-screen CRT, scanlines and a blinking cursor.</sub></td>
+    <td><a href="https://griffdog21.github.io/stremio-marquee/?theme=comic#install"><img src="docs/themes/comic.jpg" alt="Comic Pop"></a><br><b>💥 Comic Pop</b><br><sub>Halftone panels, speed lines and a big KA-POW.</sub></td>
+    <td><a href="https://griffdog21.github.io/stremio-marquee/?theme=arcade#install"><img src="docs/themes/arcade.jpg" alt="Pixel Arcade"></a><br><b>🕹️ Pixel Arcade</b><br><sub>8-bit invaders, a high score and INSERT COIN.</sub></td>
   </tr>
   <tr>
     <td><a href="https://griffdog21.github.io/stremio-marquee/?theme=haunt#install"><img src="docs/themes/haunt.jpg" alt="Hallowed"></a><br><b>🎃 Hallowed</b><br><sub>Harvest moons, bats and graveyard hills. Halloween all year.</sub></td>
@@ -57,12 +57,14 @@ Stremio add-ons can't repaint the app itself, but they **can** fill your home sc
   </tr>
 </table>
 
+<p align="center"><sub>…plus Gilded Age, Rewind VHS, Bauhaus, Phosphor, Vaporwave, Snowfall, Velvet Premiere, Sugar Pastel, Wasteland, Gothic, Blue Note, Storybook, Monochrome, Tropical, Dragon Temple, Dark Academia and Deep Sea. <a href="https://griffdog21.github.io/stremio-marquee/#themes">See all 25 →</a></sub></p>
+
 ## 🎨 Optional: theme art
 
 Every theme also comes in a **Theme art** edition that redraws each poster in the theme's style, generated from scratch from the title, year, genres and rating (no studio artwork). It's **off unless you choose it**: flip the switch in the site's Install panel, or install `…/addon/<id>/manifest.json` instead of `…/addon/<id>-classic/manifest.json`.
 
-<p align="center"><img src="docs/gallery.jpg" alt="Blade Runner drawn by all eight Marquee themes" width="100%"></p>
-<p align="center"><sub>One title, eight styles: what the optional Theme art editions look like.</sub></p>
+<p align="center"><img src="docs/gallery.jpg" alt="Blade Runner drawn in all twelve Marquee art styles" width="100%"></p>
+<p align="center"><sub>One title, twelve art styles: what the optional Theme art editions look like.</sub></p>
 
 ## 📺 Install on Google TV (or anything else)
 
@@ -169,14 +171,14 @@ flowchart LR
   subgraph build["GitHub Actions · daily"]
     C[(Cinemeta<br/>trending + metadata)] --> E[Marquee art engine<br/>SVG → resvg → JPEG]
   end
-  E --> P["GitHub Pages<br/>16 add-ons + your presets · 1,000+ posters<br/>website · CSS themes"]
+  E --> P["GitHub Pages<br/>50 add-ons + your presets · 3,000+ posters<br/>website · CSS themes"]
   P -->|manifest + catalogs| S["Stremio on every device<br/>Google TV · Android · iOS · desktop · web"]
   U["Studio (browser)<br/>same engine, live preview"] -->|Publish: presets/name.json| build
   U -.->|or config in the install URL| V["Optional live server<br/>renders art on demand"]
   V -.-> S
 ```
 
-- **One engine everywhere.** `src/core` is plain ES modules: themes, the eight art templates, text fitting, manifests and catalogs. The same code runs in the GitHub Actions build, the Node server, and your browser (the Studio's live preview).
+- **One engine everywhere.** `src/core` is plain ES modules: themes, the twelve art templates, text fitting, manifests and catalogs. The same code runs in the GitHub Actions build, the Node server, and your browser (the Studio's live preview).
 - **Text fits, always.** Glyph advance widths for every bundled font are precomputed (`src/core/font-metrics.js`), so titles are wrapped, balanced and sized identically in Node and the browser.
 - **Stateless server.** A custom setup lives entirely in its install URL (`/<config>/manifest.json`), and every poster's data travels in its own image URL, so the server can scale to zero.
 - **Real IMDb IDs.** Catalog items keep their `tt…` IDs, so your stream add-ons, library and watch history work exactly as before.

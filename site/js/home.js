@@ -1,12 +1,12 @@
-import { THEMES, getTheme } from '../core/themes.js';
+import { THEMES, GROUPS, getTheme } from '../core/themes.js';
 import {
-  applyTheme, cardVars, siteInfo, presetManifest, stremioLink, webInstallLink, qrSvg, copyText, seasonalTheme, store, h,
+  applyTheme, cardVars, siteInfo, presetManifest, stremioLink, webInstallLink, qrSvg, copyText, seasonalTheme, SEASON_BADGES, store, h,
 } from './common.js';
 
 const info = await siteInfo();
 const ext = info.imageExt || 'jpg';
 const params = new URLSearchParams(location.search);
-const october = new Date().getMonth() === 9;
+const inSeason = seasonalTheme();
 let current = params.get('theme') || store.get('theme', seasonalTheme());
 if (!THEMES.some((t) => t.id === current)) current = seasonalTheme();
 // Real posters by default; generated art is the opt-in.
@@ -17,9 +17,9 @@ const json = (url) => fetch(url).then((r) => (r.ok ? r.json() : null)).catch(() 
 
 // --- Gallery ------------------------------------------------------------------
 for (const t of THEMES) {
-  $('gallery').append(h('article', { class: 'card', style: cardVars(t.palette), 'data-theme': t.id },
+  $('gallery').append(h('article', { class: 'card', style: cardVars(t.palette), 'data-theme': t.id, 'data-group': t.group },
     h('button', { class: 'card-select', type: 'button', 'aria-label': `Preview ${t.name}`, onclick: () => select(t.id, true) }),
-    october && t.id === 'haunt' ? h('span', { class: 'badge' }, 'Halloween pick') : null,
+    t.id === inSeason && SEASON_BADGES[t.id] ? h('span', { class: 'badge' }, SEASON_BADGES[t.id]) : null,
     h('div', { class: 'card-shot' },
       h('img', { 'data-theme': t.id, src: `previews/${t.id}.${ext}`, alt: `${t.name} theme on a Stremio home screen`, loading: 'lazy', width: 1280, height: 720 })),
     h('div', { class: 'card-body' },
@@ -31,6 +31,14 @@ for (const t of THEMES) {
         h('a', { class: 'btn small card-install', 'data-theme': t.id, href: stremioLink(presetManifest(info.base, t.id, real)) }, 'Install'),
         h('a', { class: 'btn small ghost', href: `studio.html?theme=${t.id}` }, 'Customize')))));
 }
+
+// Filter chips: 25 themes is a lot to scroll, so they come in groups.
+function filterGallery(group) {
+  document.querySelectorAll('#theme-filter .chip').forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.group === group)));
+  document.querySelectorAll('#gallery .card').forEach((c) => { c.hidden = group !== 'all' && c.dataset.group !== group; });
+}
+$('theme-filter').append(...[{ id: 'all', name: `All ${THEMES.length}` }, ...GROUPS].map((g) =>
+  h('button', { class: 'chip', type: 'button', 'data-group': g.id, 'aria-pressed': String(g.id === 'all'), onclick: () => filterGallery(g.id) }, g.name)));
 
 // --- TV preview -------------------------------------------------------------------------
 // Pre-rendered home screens: previews/<id> shows real posters, <id>-art theme art.
@@ -120,12 +128,16 @@ async function buildWall() {
   wall.classList.add('wall');
   const lists = await Promise.all(THEMES.map((t) =>
     json(`addon/${t.id}-classic/catalog/movie/mq-mood.json`).then((j) => j?.metas.slice(0, 3) || [])));
-  for (let row = 0; row < 3; row++) {
+  // An 8 × 3 grid, dealt round-robin across themes; some themes share a genre, so skip repeats.
+  const seen = new Set();
+  for (let row = 0; row < 3 && seen.size < 24; row++) {
     THEMES.forEach((t, col) => {
       const meta = lists[col][row];
+      if (!meta || seen.has(meta.id) || seen.size >= 24) return;
+      seen.add(meta.id);
       // Catalog URLs are absolute (Stremio needs that); load them relative to this page.
-      const src = meta?.poster.startsWith(`${info.base}/`) ? meta.poster.slice(info.base.length + 1) : meta?.poster;
-      if (meta) wall.append(h('img', { src, alt: `${meta.name} (${t.name})`, loading: 'lazy' }));
+      const src = meta.poster.startsWith(`${info.base}/`) ? meta.poster.slice(info.base.length + 1) : meta.poster;
+      wall.append(h('img', { src, alt: `${meta.name} (${t.name})`, loading: 'lazy' }));
     });
   }
 }

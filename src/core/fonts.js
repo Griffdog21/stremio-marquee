@@ -16,6 +16,11 @@ export const FONTS = {
   barlow: { family: 'Barlow Condensed', weight: 400, file: 'BarlowCondensed-Regular.ttf' },
   barlowSemi: { family: 'Barlow Condensed', weight: 600, file: 'BarlowCondensed-SemiBold.ttf' },
   monoton: { family: 'Monoton', weight: 400, file: 'Monoton-Regular.ttf' },
+  marcellus: { family: 'Marcellus', weight: 400, file: 'Marcellus-Regular.ttf' },
+  rye: { family: 'Rye', weight: 400, file: 'Rye-Regular.ttf' },
+  bangers: { family: 'Bangers', weight: 400, file: 'Bangers-Regular.ttf' },
+  pixel: { family: 'Press Start 2P', weight: 400, file: 'PressStart2P-Regular.ttf' },
+  blackletter: { family: 'UnifrakturMaguntia', weight: 400, file: 'UnifrakturMaguntia-Book.ttf' },
 };
 
 export const FONT_LICENSES = {
@@ -31,6 +36,11 @@ export const FONT_LICENSES = {
   'Space Mono': 'OFL-1.1',
   'Barlow Condensed': 'OFL-1.1',
   Monoton: 'OFL-1.1',
+  Marcellus: 'OFL-1.1',
+  Rye: 'OFL-1.1',
+  Bangers: 'OFL-1.1',
+  'Press Start 2P': 'OFL-1.1',
+  UnifrakturMaguntia: 'OFL-1.1',
 };
 
 // Extra code points measured beyond Latin-1 (typographic punctuation and the

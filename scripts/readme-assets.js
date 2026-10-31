@@ -6,7 +6,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import opentype from 'opentype.js';
-import { THEMES } from '../src/core/themes.js';
+import { THEMES, TEMPLATES, themeForTemplate } from '../src/core/themes.js';
 import { artBody } from '../src/core/art/index.js';
 import { renderBoard } from '../src/core/board.js';
 import { FONTS } from '../src/core/fonts.js';
@@ -53,7 +53,7 @@ function banner({ animated = true, w = 1280, h = 440 } = {}) {
   const signW = w - 300;
   const signH = 236;
   const title = outline('monoton', 'MARQUEE', 132, w / 2, signY + 168, 6);
-  const tag = outline('barlowSemi', 'THEMES · ORIGINAL POSTER ART · CUSTOM ROWS · FOR STREMIO ON EVERY SCREEN', 21, w / 2, oy + 406, 2.6);
+  const tag = outline('barlowSemi', 'REAL POSTERS · SPOTLIGHT ROWS · CURATED COLLECTIONS · ON EVERY SCREEN', 21, w / 2, oy + 406, 2.6);
 
   // Bulbs around the sign, in three chase groups.
   const bulbs = [];
@@ -64,7 +64,7 @@ function banner({ animated = true, w = 1280, h = 440 } = {}) {
   const bulbSvg = bulbs.map(([x, y], i) => `<circle class="b b${i % 3}" cx="${x}" cy="${y}" r="5.5"/>`).join('');
 
   // Letterboard tiles under the sign.
-  const words = ['NOW', 'SHOWING', '8 THEMES', 'GOOGLE TV READY'];
+  const words = ['NOW', 'SHOWING', `${THEMES.length} THEMES`, 'GOOGLE TV READY'];
   const tileFont = 'bebas';
   const tileSize = 30;
   const tiles = words.map((word) => ({ word, ...outline(tileFont, word, tileSize, 0, 0, 1.5) }));
@@ -118,27 +118,31 @@ function banner({ animated = true, w = 1280, h = 440 } = {}) {
 }
 
 const SHOWCASE_ID = 'tt0083658';
+// The README shows a handful of themes; the site has the rest.
+const SHOWCASE = ['neon', 'sakura', 'noir', 'western', 'comic', 'arcade', 'haunt', 'aurora'];
 
 async function main() {
   writeFileSync(out('banner.svg'), banner());
   writeFileSync(out('social.png'), svgToPng(banner({ animated: false, w: 1280, h: 640 })));
   console.log('banner.svg, social.png');
 
-  // One title, eight styles.
+  // One title in every art style.
   const item = await meta('movie', SHOWCASE_ID);
+  const styles = Object.entries(TEMPLATES);
   const pw = 300;
   const ph = 450;
   const gap = 18;
-  const cols = 4;
+  const cols = 6;
+  const rows = Math.ceil(styles.length / cols);
   const W = cols * pw + (cols + 1) * gap;
-  const H = 2 * (ph + 40) + 3 * gap;
+  const H = rows * (ph + 40) + (rows + 1) * gap;
   let s = `<rect width="${W}" height="${H}" rx="24" fill="#0c0a12"/>`;
-  THEMES.forEach((t, i) => {
+  styles.forEach(([template, style], i) => {
     const x = gap + (i % cols) * (pw + gap);
     const y = gap + Math.floor(i / cols) * (ph + 40 + gap);
-    const a = artBody({ template: t.template, palette: t.palette, item, idPrefix: `g${i}` });
+    const a = artBody({ template, palette: themeForTemplate(template).palette, item, idPrefix: `g${i}` });
     s += `<clipPath id="c${i}"><rect x="${x}" y="${y}" width="${pw}" height="${ph}" rx="12"/></clipPath><g clip-path="url(#c${i})"><svg x="${x}" y="${y}" width="${pw}" height="${ph}" viewBox="0 0 ${a.w} ${a.h}">${a.body}</svg></g>`;
-    s += `<text x="${x + pw / 2}" y="${y + ph + 28}" text-anchor="middle" font-family="${FONTS.barlowSemi.family}" font-weight="600" font-size="20" letter-spacing="2" fill="#e9e3ff">${t.name.toUpperCase()}</text>`;
+    s += `<text x="${x + pw / 2}" y="${y + ph + 28}" text-anchor="middle" font-family="${FONTS.barlowSemi.family}" font-weight="600" font-size="20" letter-spacing="2" fill="#e9e3ff">${style.name.toUpperCase()}</text>`;
   });
   const gallery = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${s}</svg>`;
   writeFileSync(out('gallery.jpg'), await encode(svgToPng(gallery)));
@@ -146,7 +150,7 @@ async function main() {
 
   // A TV-style home screen per theme, from real rows.
   const [movies, series] = await Promise.all([catalog('movie', 'top'), catalog('series', 'top')]);
-  for (const t of THEMES) {
+  for (const t of THEMES.filter((x) => SHOWCASE.includes(x.id))) {
     const coll = await mapLimit((COLLECTIONS[t.collection.id] || []).slice(0, 6), 6, (c) => meta('movie', c.id).catch(() => null));
     const rows = [
       { name: t.collection.name, type: 'movie', shape: 'landscape', items: coll.filter(Boolean) },

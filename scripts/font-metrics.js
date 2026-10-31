@@ -38,7 +38,8 @@ for (const [key, def] of Object.entries(FONTS)) {
     upm: font.unitsPerEm,
     asc: font.tables.hhea.ascender,
     desc: font.tables.hhea.descender,
-    cap: font.tables.os2?.sCapHeight || Math.round(font.unitsPerEm * 0.7),
+    // Measured from "H": some fonts' OS/2 cap height is wrong (Rye, Press Start 2P).
+    cap: Math.round(font.charToGlyph('H').getBoundingBox().y2) || font.tables.os2?.sCapHeight || Math.round(font.unitsPerEm * 0.7),
     avg,
     latin,
     extra,

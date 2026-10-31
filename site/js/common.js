@@ -1,5 +1,5 @@
 // Shared helpers for the Marquee website.
-import { getTheme, PALETTE_KEYS } from '../core/themes.js';
+import { getTheme, displayFont, PALETTE_KEYS } from '../core/themes.js';
 import { readableOn, luminance } from '../core/util.js';
 import qrcode from '../vendor/qrcode.mjs';
 
@@ -13,6 +13,13 @@ const DISPLAY = {
   VT323: [1.08, '0.02em', 0.95],
   Creepster: [0.94, '0.03em', 1.05],
   Syncopate: [0.52, '0.06em', 1.35],
+  Monoton: [0.62, '0.02em', 1.1],
+  'Poiret One': [0.9, '0.04em', 1.08],
+  Marcellus: [0.8, '0.02em', 1.1],
+  Rye: [0.7, '0', 1.12],
+  Bangers: [0.96, '0.03em', 1.02],
+  'Press Start 2P': [0.46, '0', 1.45],
+  UnifrakturMaguntia: [0.86, '0', 1.08],
 };
 
 /** Re-theme the whole page: palette, heading typeface, browser chrome. */
@@ -22,7 +29,7 @@ export function applyTheme(themeId, { colors, template } = {}) {
   const root = document.documentElement;
   for (const k of PALETTE_KEYS) root.style.setProperty(`--${k}`, p[k]);
   root.style.setProperty('--on-primary', readableOn(p.primary, '#ffffff', '#111111'));
-  const face = getTheme(template || theme.template).font;
+  const face = displayFont(themeId, template);
   const [scale, tracking, leading] = DISPLAY[face] || [1, '0.02em', 1.05];
   root.style.setProperty('--display', `'${face}', 'Barlow Condensed', sans-serif`);
   root.style.setProperty('--display-scale', scale);
@@ -30,6 +37,7 @@ export function applyTheme(themeId, { colors, template } = {}) {
   root.style.setProperty('--display-leading', leading);
   root.style.colorScheme = luminance(p.bg) > 0.45 ? 'light' : 'dark';
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', p.bg);
+  if (!root.classList.contains('themed')) setTimeout(() => root.classList.add('themed'), 100);
   return p;
 }
 
@@ -93,8 +101,11 @@ export function download(filename, text, type = 'text/css') {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-// October gets the Halloween theme; the rest of the year opens on neon.
-export const seasonalTheme = () => (new Date().getMonth() === 9 ? 'haunt' : 'neon');
+// The site opens on a theme for the season: Halloween in October, snow over
+// the holidays, blossom in spring, neon the rest of the year.
+const SEASONS = { 9: 'haunt', 11: 'snowfall', 0: 'snowfall', 2: 'sakura', 3: 'sakura' };
+export const seasonalTheme = () => SEASONS[new Date().getMonth()] || 'neon';
+export const SEASON_BADGES = { haunt: 'Halloween pick', snowfall: 'Winter pick', sakura: 'Spring pick' };
 
 export const store = {
   get(key, fallback) {

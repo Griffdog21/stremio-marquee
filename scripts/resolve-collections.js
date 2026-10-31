@@ -1,13 +1,17 @@
 // Resolves the curated collections in data/collections.source.json to IMDb ids
 // by searching Cinemeta and matching on title + release year, then writes
 // data/collections.json. Run with `npm run collections` after editing lists.
-import { readFileSync, writeFileSync } from 'node:fs';
+// Only new collections (or ones with unresolved titles) get looked up; pass
+// --all after swapping titles to re-resolve everything.
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { search, meta } from '../src/node/cinemeta.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const source = JSON.parse(readFileSync(path.join(root, 'data/collections.source.json'), 'utf8'));
+const outFile = path.join(root, 'data/collections.json');
+const previous = existsSync(outFile) && !process.argv.includes('--all') ? JSON.parse(readFileSync(outFile, 'utf8')) : {};
 
 const simplify = (s) =>
   s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
@@ -41,23 +45,36 @@ async function resolve(title, year, explicitId) {
   return hit;
 }
 
+// A collection is current when it already resolved every title in its list.
+const current = (id, list) => previous[id]?.length === list.length;
+
 const out = {};
 let missing = 0;
 for (const [id, list] of Object.entries(source)) {
-  out[id] = [];
-  for (const [title, year, explicitId] of list) {
-    let hit;
-    try {
-      hit = await resolve(title, year, explicitId);
-    } catch (err) {
-      missing++;
-      console.warn(`  ✗ ${id}: ${title} (${year}): ${err.message}`);
-      continue;
-    }
-    out[id].push({ id: hit.id, name: hit.name, year: hit.year });
-    if (simplify(hit.name) !== simplify(title)) console.log(`  ~ ${title} (${year}) → ${hit.name} (${hit.year}) ${hit.id}`);
+  if (current(id, list)) {
+    out[id] = previous[id];
+    continue;
   }
+  // Look titles up a few at a time, keeping the list's order.
+  const found = new Array(list.length);
+  let next = 0;
+  const worker = async () => {
+    while (next < list.length) {
+      const i = next++;
+      const [title, year, explicitId] = list[i];
+      try {
+        const hit = await resolve(title, year, explicitId);
+        found[i] = { id: hit.id, name: hit.name, year: hit.year };
+        if (simplify(hit.name) !== simplify(title)) console.log(`  ~ ${title} (${year}) → ${hit.name} (${hit.year}) ${hit.id}`);
+      } catch (err) {
+        missing++;
+        console.warn(`  ✗ ${id}: ${title} (${year}): ${err.message}`);
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: 6 }, worker));
+  out[id] = found.filter(Boolean);
   console.log(`${id}: ${out[id].length}/${list.length}`);
 }
-writeFileSync(path.join(root, 'data/collections.json'), `${JSON.stringify(out, null, 2)}\n`);
+writeFileSync(outFile, `${JSON.stringify(out, null, 2)}\n`);
 console.log(`wrote data/collections.json (${missing} unresolved)`);

@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { TEMPLATES, SHAPES, renderArt, renderLogo, renderBackdrop } from '../src/core/art/index.js';
 import { renderBoard } from '../src/core/board.js';
 import { fitText, measure } from '../src/core/text.js';
-import { getTheme, THEMES } from '../src/core/themes.js';
+import { getTheme, themeForTemplate, THEMES } from '../src/core/themes.js';
+import { FONTS } from '../src/core/fonts.js';
 import { svgToPng } from '../src/node/render.js';
 
 const EDGE_CASES = [
@@ -20,7 +21,7 @@ const pngSize = (buf) => [buf.readUInt32BE(16), buf.readUInt32BE(20)];
 
 test('every template renders every shape for awkward titles', () => {
   for (const template of Object.keys(TEMPLATES)) {
-    const palette = getTheme(template).palette;
+    const palette = themeForTemplate(template).palette;
     for (const [shape, [w, h]] of Object.entries(SHAPES)) {
       for (const item of EDGE_CASES) {
         const svg = renderArt({ template, palette, item, shape });
@@ -43,7 +44,7 @@ test('art is deterministic per title', () => {
 });
 
 test('text fitting never exceeds its box (or squeezes when it must)', () => {
-  for (const font of ['bebas', 'abril', 'limelight', 'marker', 'archivo', 'vt323', 'creepster', 'syncopate']) {
+  for (const font of Object.keys(FONTS)) {
     for (const item of EDGE_CASES) {
       const fit = fitText(item.name || 'Untitled', { font, maxWidth: 240, maxHeight: 120, maxLines: 3, maxSize: 60, minSize: 10 });
       assert.ok(fit.lines.length <= 3, `${font}: ${fit.lines.length} lines`);

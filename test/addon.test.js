@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
-import { THEMES } from '../src/core/themes.js';
+import { THEMES, GROUPS, TEMPLATES } from '../src/core/themes.js';
+import { FONTS } from '../src/core/fonts.js';
 import { normalizeConfig, encodeConfig } from '../src/core/config.js';
 import { buildManifest, resolveRows, toMetas, artToken, parseArtToken } from '../src/core/addon.js';
 import { VERSION } from '../src/core/version.js';
@@ -29,6 +30,21 @@ test('every stock manifest and its real-poster twin pass the official Stremio li
   }
   assert.equal(ids.size, THEMES.length * 2, 'every add-on id is unique, so all can be installed together');
   assert.ok(ids.has('community.marquee.haunt') && ids.has('community.marquee.haunt.classic'));
+});
+
+test('every theme has its own collection, one gallery group and a bundled font', () => {
+  const collections = JSON.parse(readFileSync(new URL('../data/collections.json', import.meta.url), 'utf8'));
+  const siteCss = readFileSync(new URL('../site/css/site.css', import.meta.url), 'utf8');
+  const families = new Set(Object.values(FONTS).map((f) => f.family));
+  const grouped = GROUPS.flatMap((g) => g.themes);
+  assert.equal(new Set(THEMES.map((t) => t.collection.id)).size, THEMES.length, 'collections are not shared');
+  assert.equal(grouped.length, THEMES.length, 'groups list each theme once');
+  for (const t of THEMES) {
+    assert.ok(collections[t.collection.id]?.length >= 15, `${t.id}: collection is resolved`);
+    assert.ok(grouped.includes(t.id), `${t.id}: belongs to a group`);
+    assert.ok(families.has(t.font) && siteCss.includes(`font-family: '${t.font}'`), `${t.id}: ${t.font} is bundled and loaded`);
+  }
+  for (const [id, tpl] of Object.entries(TEMPLATES)) assert.ok(families.has(tpl.font), `template ${id}: ${tpl.font} is bundled`);
 });
 
 test('custom manifests get a distinct id, the chosen name, and pass the linter', () => {

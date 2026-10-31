@@ -1,7 +1,7 @@
 // Full UI themes for the Stremio apps that accept CSS: Stremio Enhanced
 // (desktop) and web.stremio.com via the Stylus extension. They restyle Stremio's
 // own CSS custom properties, so they survive most Stremio updates.
-import { getTheme, PALETTE_KEYS } from './themes.js';
+import { getTheme, displayFont, PALETTE_KEYS } from './themes.js';
 import { mix, rgba, luminance, lighten } from './util.js';
 import { VERSION } from './version.js';
 
@@ -14,6 +14,13 @@ const GOOGLE_FONTS = {
   VT323: 'VT323',
   Creepster: 'Creepster',
   Syncopate: 'Syncopate:wght@700',
+  Monoton: 'Monoton',
+  'Poiret One': 'Poiret+One',
+  Marcellus: 'Marcellus',
+  Rye: 'Rye',
+  Bangers: 'Bangers',
+  'Press Start 2P': 'Press+Start+2P',
+  UnifrakturMaguntia: 'UnifrakturMaguntia',
 };
 
 // How big the display face should be for row titles (condensed faces run larger).
@@ -26,6 +33,13 @@ const TITLE_SIZE = {
   VT323: '1.9rem',
   Creepster: '1.7rem',
   Syncopate: '1.05rem',
+  Monoton: '1.5rem',
+  'Poiret One': '1.55rem',
+  Marcellus: '1.5rem',
+  Rye: '1.35rem',
+  Bangers: '1.8rem',
+  'Press Start 2P': '0.95rem',
+  UnifrakturMaguntia: '1.75rem',
 };
 
 const ROW_TITLE = '[class*="meta-row-container"] [class*="header-container"] [class*="title-container"]';
@@ -34,33 +48,52 @@ const FOCUSED = ['.active', '.hovered', '.selected', ':focus-within']
   .map((s) => `[class*="meta-item-container"]${s} [class*="poster-container"]`)
   .join(',\n');
 
-function signature(template, p) {
+const SCANLINES = (alpha) => `html body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 2147483000; background: repeating-linear-gradient(0deg, ${alpha} 0 1px, transparent 1px 3px); }`;
+const GREYSCALE = `${POSTER} img { filter: grayscale(1) contrast(1.12) brightness(0.92); transition: filter 0.35s ease; }
+[class*="meta-item-container"]:hover [class*="poster-container"] img,
+${FOCUSED.split(',\n').map((s) => `${s} img`).join(',\n')} { filter: none; }`;
+
+// Per-theme extras on top of the art style's look.
+function themeExtras(themeId) {
+  // Noir and Monochrome: posters fall to black and white until you look at them.
+  if (themeId === 'noir' || themeId === 'mono') return GREYSCALE;
+  return '';
+}
+
+function signature(template, p, font) {
+  const caps = font !== 'UnifrakturMaguntia'; // blackletter capitals are unreadable
   switch (template) {
     case 'neon':
       return `${ROW_TITLE} { text-shadow: 0 0 8px ${rgba(p.primary, 0.9)}, 0 0 22px ${rgba(p.primary, 0.6)}; color: ${lighten(p.primary, 0.82)}; }`;
     case 'noir':
-      return `/* Noir: posters fall to black and white until you look at them. */
-${POSTER} img { filter: grayscale(1) contrast(1.12) brightness(0.92); transition: filter 0.35s ease; }
-[class*="meta-item-container"]:hover [class*="poster-container"] img,
-${FOCUSED.split(',\n').map((s) => `${s} img`).join(',\n')} { filter: none; }
-${ROW_TITLE} { text-transform: uppercase; letter-spacing: 0.06em; }
+      return `${caps ? `${ROW_TITLE} { text-transform: uppercase; letter-spacing: 0.06em; }` : ''}
 ${ROW_TITLE}::before { content: ''; display: inline-block; width: 1.6rem; height: 0.2rem; background: ${p.accent}; margin-right: 0.8rem; vertical-align: middle; }`;
     case 'deco':
       return `${ROW_TITLE} { text-transform: uppercase; letter-spacing: 0.12em; background: linear-gradient(180deg, ${lighten(p.primary, 0.6)}, ${p.primary} 55%, ${mix(p.primary, '#000000', 0.35)}); -webkit-background-clip: text; background-clip: text; color: transparent; }`;
     case 'vhs':
       return `${ROW_TITLE} { transform: rotate(-1.2deg); color: ${p.text}; }
-html body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 2147483000; background: repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 3px); }`;
+${SCANLINES('rgba(255,255,255,0.025)')}`;
     case 'bauhaus':
       return `${ROW_TITLE} { text-transform: lowercase; letter-spacing: -0.01em; }
 ${ROW_TITLE}::before { content: ''; display: inline-block; width: 0.9rem; height: 0.9rem; border-radius: 50%; background: ${p.primary}; margin-right: 0.7rem; }`;
     case 'terminal':
       return `${ROW_TITLE} { text-transform: uppercase; text-shadow: 0 0 6px ${rgba(p.primary, 0.8)}; color: ${p.primary}; }
 ${ROW_TITLE}::before { content: '> '; }
-html body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 2147483000; background: repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0 1px, transparent 1px 3px); }`;
+${SCANLINES('rgba(0,0,0,0.18)')}`;
     case 'haunt':
       return `${ROW_TITLE} { color: ${p.primary}; text-shadow: 0 0 14px ${rgba(p.primary, 0.55)}; letter-spacing: 0.03em; }`;
     case 'aurora':
       return `${ROW_TITLE} { text-transform: uppercase; letter-spacing: 0.16em; background: linear-gradient(90deg, ${p.primary}, ${p.secondary}, ${p.accent}); -webkit-background-clip: text; background-clip: text; color: transparent; }`;
+    case 'sakura':
+      return `${ROW_TITLE} { color: ${p.text}; letter-spacing: 0.04em; }
+${ROW_TITLE}::before { content: ''; display: inline-block; width: 0.75rem; height: 0.75rem; border-radius: 0 70% 0 70%; background: ${p.primary}; margin-right: 0.7rem; transform: rotate(-20deg); }`;
+    case 'wanted':
+      return `${ROW_TITLE} { text-transform: uppercase; letter-spacing: 0.08em; color: ${p.primary}; text-shadow: 0 2px 0 ${rgba('#000000', 0.5)}; }`;
+    case 'pop':
+      return `${ROW_TITLE} { text-transform: uppercase; letter-spacing: 0.04em; color: ${p.primary}; text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; transform: rotate(-1.5deg); }`;
+    case 'arcade':
+      return `${ROW_TITLE} { text-transform: uppercase; color: ${p.accent}; text-shadow: 3px 3px 0 ${p.primary}; }
+${SCANLINES('rgba(0,0,0,0.16)')}`;
     default:
       return '';
   }
@@ -71,8 +104,7 @@ export function themeCssBody({ themeId, palette, template }) {
   const p = {};
   for (const k of PALETTE_KEYS) p[k] = palette?.[k] || theme.palette[k];
   const tpl = template || theme.template;
-  // Template ids double as theme ids, so the art style also picks the face.
-  const font = getTheme(tpl).font;
+  const font = displayFont(theme.id, template);
   const light = luminance(p.bg) > 0.45;
   return {
     imports: GOOGLE_FONTS[font] ? `@import url('https://fonts.googleapis.com/css2?family=${GOOGLE_FONTS[font]}&display=swap');` : '',
@@ -107,7 +139,8 @@ ${FOCUSED} {
   box-shadow: 0 0 0 0.2rem ${p.primary}, 0 0 1.6rem ${rgba(p.primary, 0.55)} !important;
 }
 
-${signature(tpl, p)}
+${signature(tpl, p, font)}
+${themeExtras(theme.id)}
 `,
   };
 }

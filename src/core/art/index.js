@@ -1,9 +1,9 @@
 // Entry point for generated art: posters, wide cards, square tiles, addon logos
 // and backdrops. Pure string-in/SVG-out, so it runs anywhere.
-import { rng, seedFrom, n, lighten, mix, esc } from '../util.js';
+import { rng, seedFrom, n, lighten, mix, esc, luminance } from '../util.js';
 import { splitTitle, measure, capHeight } from '../text.js';
 import { FONTS } from '../fonts.js';
-import { PALETTE_KEYS, getTheme } from '../themes.js';
+import { PALETTE_KEYS, themeForTemplate } from '../themes.js';
 import { linear, glow, blur } from './common.js';
 import neon from './neon.js';
 import noir from './noir.js';
@@ -13,8 +13,12 @@ import bauhaus from './bauhaus.js';
 import terminal from './terminal.js';
 import haunt from './haunt.js';
 import aurora from './aurora.js';
+import sakura from './sakura.js';
+import wanted from './wanted.js';
+import pop from './pop.js';
+import arcade from './arcade.js';
 
-export const TEMPLATES = { neon, noir, deco, vhs, bauhaus, terminal, haunt, aurora };
+export const TEMPLATES = { neon, noir, deco, vhs, bauhaus, terminal, haunt, aurora, sakura, wanted, pop, arcade };
 
 // Pixel sizes per Stremio posterShape. Wide matches Stremio's 0.5625 ratio.
 export const SHAPES = {
@@ -37,7 +41,7 @@ export function artItem(item = {}) {
 }
 
 export function fullPalette(palette, template) {
-  const base = getTheme(template).palette;
+  const base = themeForTemplate(template).palette;
   const out = {};
   for (const k of PALETTE_KEYS) out[k] = (palette && palette[k]) || base[k];
   return out;
@@ -78,7 +82,9 @@ export function renderLogo({ palette, template = 'neon', size = 512, letter = 'M
   const uid = `lg${seedFrom(JSON.stringify(p)).toString(36)}`;
   let o = '<defs>';
   o += linear(`${uid}bg`, [[0, mix(p.surface, p.bg, 0.2)], [1, p.bg]]);
-  o += linear(`${uid}m`, [[0, lighten(p.primary, 0.25)], [1, p.secondary]], { x2: 1, y2: 1 });
+  // On light palettes the sign needs a deeper letter to stand out.
+  const light = luminance(p.bg) > 0.45;
+  o += linear(`${uid}m`, [[0, light ? mix(p.primary, p.text, 0.25) : lighten(p.primary, 0.25)], [1, light ? mix(p.secondary, p.text, 0.5) : p.secondary]], { x2: 1, y2: 1 });
   o += glow(`${uid}g`, 10 * u);
   o += blur(`${uid}b`, 6 * u);
   o += '</defs>';

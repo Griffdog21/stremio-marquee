@@ -10,6 +10,11 @@
 @font-face { font-family: 'VT323'; src: url('../fonts/VT323-Regular.ttf') format('truetype'); font-display: swap; }
 @font-face { font-family: 'Archivo Black'; src: url('../fonts/ArchivoBlack-Regular.ttf') format('truetype'); font-display: swap; }
 @font-face { font-family: 'Creepster'; src: url('../fonts/Creepster-Regular.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'Marcellus'; src: url('../fonts/Marcellus-Regular.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'Rye'; src: url('../fonts/Rye-Regular.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'Bangers'; src: url('../fonts/Bangers-Regular.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'Press Start 2P'; src: url('../fonts/PressStart2P-Regular.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'UnifrakturMaguntia'; src: url('../fonts/UnifrakturMaguntia-Book.ttf') format('truetype'); font-display: swap; }
 @font-face { font-family: 'Syncopate'; font-weight: 700; src: url('../fonts/Syncopate-Bold.ttf') format('truetype'); font-display: swap; }
 @font-face { font-family: 'Space Mono'; font-weight: 400; src: url('../fonts/SpaceMono-Regular.ttf') format('truetype'); font-display: swap; }
 @font-face { font-family: 'Space Mono'; font-weight: 700; src: url('../fonts/SpaceMono-Bold.ttf') format('truetype'); font-display: swap; }
@@ -52,11 +57,13 @@ body {
   background-attachment: fixed;
   color: var(--text);
   font: 400 1rem/1.6 var(--body);
-  transition: background-color 0.6s ease, color 0.6s ease;
   overflow-x: hidden;
 }
 
 /* Film grain over everything (static SVG noise, very faint). */
+/* Fade between themes, but not from the default palette on first load. */
+.themed body { transition: background-color 0.6s ease, color 0.6s ease; }
+
 body::before {
   content: '';
   position: fixed;
@@ -169,6 +176,8 @@ section.block { padding: clamp(56px, 9vw, 110px) 0; border-top: 1px solid var(--
 
 /* --- Theme gallery ------------------------------------------------------------ */
 .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr)); gap: 20px; }
+.theme-filter { margin: -14px 0 24px; }
+.card[hidden] { display: none; }
 .card { position: relative; border-radius: var(--radius); overflow: hidden; background: var(--c-bg); color: var(--c-text); border: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent); transition: transform 0.25s ease, box-shadow 0.3s ease, border-color 0.3s; display: flex; flex-direction: column; }
 .card:hover { transform: translateY(-4px); box-shadow: 0 24px 60px -24px var(--c-primary); }
 .card[aria-current='true'] { border-color: var(--c-primary); box-shadow: 0 0 0 2px var(--c-primary), 0 24px 60px -24px var(--c-primary); }
