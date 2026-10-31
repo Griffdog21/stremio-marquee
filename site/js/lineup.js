@@ -149,9 +149,10 @@ $('marquee-top').addEventListener('click', () => {
 $('hide-cinemeta').addEventListener('click', () => {
   const cinemeta = addons.find((a) => a.manifest?.id === CINEMETA);
   if (!cinemeta) return toast('Cinemeta isn\'t in this account');
-  for (const { catalog, shown } of boardRows(cinemeta.manifest.catalogs || [], reference.get(cinemeta.transportUrl) || [])) {
-    if (shown) setCatalog(cinemeta, catalog, false);
-  }
+  // Setups like the Stremio Account Bootstrapper ship a Cinemeta with no home rows.
+  const shown = boardRows(cinemeta.manifest.catalogs || [], reference.get(cinemeta.transportUrl) || []).filter((r) => r.shown);
+  if (!shown.length) return toast('Cinemeta has no rows on your home screen already');
+  for (const { catalog } of shown) setCatalog(cinemeta, catalog, false);
   toast('Cinemeta\'s rows hidden; search still works. Save to apply');
 });
 
