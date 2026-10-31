@@ -5,7 +5,7 @@
 <h3 align="center">Eight cinematic themes for Stremio, on every screen. Google TV included.</h3>
 
 <p align="center">
-  Original poster art · widescreen spotlight rows · curated collections · your own images · matching desktop themes
+  Widescreen spotlight rows · curated collections · your real posters, or optional theme art · your own images · matching desktop themes
 </p>
 
 <p align="center">
@@ -24,13 +24,13 @@
 ---
 
 <p align="center"><img src="docs/gallery.jpg" alt="Blade Runner drawn by all eight Marquee themes" width="100%"></p>
-<p align="center"><sub>One title, eight styles. Every poster is generated from scratch (no studio artwork) using the title, year, genres and rating.</sub></p>
+<p align="center"><sub>Optional theme art: one title in eight styles, generated from scratch (no studio artwork). Off by default; Marquee keeps your real posters unless you switch it on.</sub></p>
 
 ## ✨ What Marquee does
 
 Stremio add-ons can't repaint the app itself, but they **can** fill your home screen with rows, posters, images and text. Marquee turns that into a theme engine:
 
-- 🎨 **Generated poster art** in eight distinct styles, rendered as plain JPEGs so every Stremio app shows them, from Google TV and Android TV to iOS, desktop and web.
+- 🎨 **Optional generated poster art** in eight distinct styles, rendered as plain JPEGs so every Stremio app shows them, from Google TV and Android TV to iOS, desktop and web.
 - 🖼️ **Real posters by default**: every theme comes as a real-poster edition (the default on the site) with the official artwork in a sharper size; generated art only fills in for titles that have no poster.
 - 🎬 **Widescreen spotlight rows**: a cinematic, Netflix-style hero row of 16:9 cards built from each theme's hand-picked collection.
 - 🎞️ **Curated collections** per theme (*Neon Nights*, *Shadows & Smoke*, *Midnight Monsters*…) plus a genre **mood row**.
@@ -64,7 +64,7 @@ Stremio add-ons can't repaint the app itself, but they **can** fill your home sc
 
 Add-ons live in your **Stremio account**, so you install once, on any device, and they sync everywhere you're signed in.
 
-1. On your **phone or computer**, open **[griffdog21.github.io/stremio-marquee](https://griffdog21.github.io/stremio-marquee/)**, pick a theme, choose **Generated art** or **Real posters**, and tap **Install in Stremio** (or **Install via Stremio Web** if you don't have the app on that device). You can also scan the QR code from the site with your phone.
+1. On your **phone or computer**, open **[griffdog21.github.io/stremio-marquee](https://griffdog21.github.io/stremio-marquee/)**, pick a theme, keep **Real posters** (the default) or switch to **Generated art**, and tap **Install in Stremio** (or **Install via Stremio Web** if you don't have the app on that device). You can also scan the QR code from the site with your phone.
 2. Open Stremio on your **Google TV**, signed in to the same account. Marquee's rows appear on the home screen; restart the app if it was already open.
 3. **Make it your home screen:** new add-ons land below Stremio's built-in rows. Open **[Lineup](https://griffdog21.github.io/stremio-marquee/lineup.html)** → **Marquee to the top** → **Hide Cinemeta's rows** (search keeps working) → **Save**.
 
