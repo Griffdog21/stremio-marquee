@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marquee · Themes for Stremio, even on your TV</title>
+  <meta name="description" content="Marquee re-themes Stremio with original generated poster art, widescreen spotlight rows, curated collections and matching desktop themes. Works on Google TV, Android TV, phones, desktop and web.">
+  <meta name="theme-color" content="#0b0618">
+  <meta property="og:title" content="Marquee · Themes for Stremio">
+  <meta property="og:description" content="Eight cinematic themes for Stremio, on every screen. Google TV included.">
+  <meta property="og:image" content="{{BASE}}/social.png">
+  <meta property="og:url" content="{{BASE}}/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+  <nav class="nav" aria-label="Main">
+    <div class="wrap">
+      <a class="brand" href="./"><span class="brand-mark" aria-hidden="true">M</span><span class="brand-name">Marquee</span></a>
+      <div class="nav-links">
+        <a href="#themes" class="hide-sm">Themes</a>
+        <a href="#install">Install</a>
+        <a href="studio.html">Studio</a>
+        <a href="lineup.html">Lineup</a>
+        <a class="gh" href="https://github.com/Griffdog21/stremio-marquee" aria-label="GitHub repository"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="hide-sm">GitHub</span></a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="wrap hero">
+    <div>
+      <div class="sign">
+        <div class="bulbs top"></div><div class="bulbs bottom"></div><div class="bulbs left"></div><div class="bulbs right"></div>
+        <h1 class="sign-title">Marquee</h1>
+        <p class="letterboard" aria-live="polite"><span>Now</span><span>showing</span><span class="hl" id="now-showing">Midnight Neon</span></p>
+      </div>
+      <h2 class="tagline">Theme your Stremio. On every screen, even the TV.</h2>
+      <p class="lede">Marquee repaints your home screen with original poster art, widescreen spotlight rows and hand-picked collections, in eight cinematic themes. Install it once; it follows your Stremio account to Google TV, Android TV, phones, desktop and web.</p>
+      <div class="btn-row">
+        <a class="btn" href="#themes">Pick a theme</a>
+        <a class="btn ghost" href="studio.html">Open the Studio</a>
+      </div>
+    </div>
+    <div class="tv-wrap">
+      <div class="tv">
+        <div class="tv-screen" id="tv-screen"></div>
+        <span class="tv-led" aria-hidden="true"></span>
+      </div>
+      <p class="tv-caption" id="tv-caption">Stremio home screen with Marquee</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="block" id="themes">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <span class="kicker">Now showing</span>
+            <h2>Eight themes. Zero setup.</h2>
+          </div>
+          <p>Every poster below is generated from scratch, with no studio artwork, in each theme's own style. Tap a theme to preview it on this page, then install it in one click.</p>
+        </div>
+        <div class="gallery" id="gallery"></div>
+      </div>
+    </section>
+
+    <section class="block" id="install">
+      <div class="wrap">
+        <div class="install">
+          <div>
+            <span class="kicker">Install</span>
+            <h2>Install <span id="install-name">Midnight Neon</span></h2>
+            <p class="lede">Add-ons live in your Stremio account, so install from any device and they appear everywhere you're signed in.</p>
+            <ol class="steps">
+              <li><b>On your phone or computer</b>, tap <b>Install in Stremio</b>. No app on this device? Use <b>Stremio Web</b> instead.</li>
+              <li><b>Sign in to the same Stremio account</b> on your Google TV. The add-on syncs over automatically; restart Stremio on the TV if it was already open.</li>
+              <li><b>Want Marquee's rows at the top?</b> Use <a href="lineup.html">Lineup</a> to reorder your home screen.</li>
+            </ol>
+            <div class="btn-row">
+              <a class="btn" id="install-app" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Install in Stremio</a>
+              <a class="btn ghost" id="install-web" href="#" target="_blank" rel="noopener">Install via Stremio Web</a>
+            </div>
+            <div class="url-box">
+              <code id="install-url">…</code>
+              <button class="btn small ghost" id="copy-url" type="button">Copy</button>
+            </div>
+          </div>
+          <figure class="qr-card" style="margin:0">
+            <div id="qr" aria-hidden="true"></div>
+            <small>Scan with your phone to install from there. Your TV picks it up from your account.</small>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="screens">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <span class="kicker">Every screen</span>
+            <h2>What changes where</h2>
+          </div>
+          <p>Stremio add-ons can send rows, posters, images and text to every Stremio app, but they can't recolor the app's own menus. Marquee themes everything an add-on can reach, and ships full UI themes for the apps that accept CSS.</p>
+        </div>
+        <div class="devices">
+          <article class="device">
+            <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="4" y="7" width="32" height="20" rx="2"/><path d="M14 33h12M20 27v6"/></svg>
+            <h3>Google TV &amp; Android TV</h3>
+            <ul><li>Themed poster art on your home rows</li><li>Widescreen spotlight rows</li><li>Curated collections + genre mood rows</li><li>Row order via Lineup</li><li class="no">App menus keep Stremio's colors</li></ul>
+          </article>
+          <article class="device">
+            <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="12" y="4" width="16" height="32" rx="3"/><path d="M18 31h4"/></svg>
+            <h3>Phone &amp; tablet</h3>
+            <ul><li>Everything the TV gets</li><li>Install straight from this page</li><li class="no">App menus keep Stremio's colors</li></ul>
+          </article>
+          <article class="device">
+            <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="7" y="8" width="26" height="17" rx="2"/><path d="M3 30h34l-3-5H6z"/></svg>
+            <h3>Desktop</h3>
+            <ul><li>Themed rows + art</li><li>Full UI theme with Stremio Enhanced</li><li>Signature effects (noir greyscale, CRT scanlines…)</li></ul>
+          </article>
+          <article class="device">
+            <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="4" y="7" width="32" height="26" rx="3"/><path d="M4 14h32M9 10.5h.01M13 10.5h.01"/></svg>
+            <h3>Stremio Web</h3>
+            <ul><li>Themed rows + art</li><li>Full UI theme with the Stylus extension</li><li>Updates itself when themes change</li></ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="desktop">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <span class="kicker">Go further</span>
+            <h2>Full UI themes for desktop &amp; web</h2>
+          </div>
+          <p>Where Stremio accepts CSS, Marquee goes all the way: backgrounds, accents, focus glow, row-title typography and one signature effect per theme.</p>
+        </div>
+        <div class="desk">
+          <article class="desk-card">
+            <h3>Stremio Enhanced <span class="muted" style="font-size:.6em">desktop</span></h3>
+            <ol>
+              <li>Install <a href="https://github.com/REVENGE977/stremio-enhanced" target="_blank" rel="noopener">Stremio Enhanced</a>.</li>
+              <li>Download the theme file below.</li>
+              <li>Settings → <b>Open themes folder</b>, drop it in, restart, apply.</li>
+            </ol>
+            <div class="btn-row"><a class="btn" id="dl-enhanced" href="#" download>Download <span class="theme-name">theme</span> .theme.css</a></div>
+          </article>
+          <article class="desk-card">
+            <h3>Stremio Web <span class="muted" style="font-size:.6em">browser</span></h3>
+            <ol>
+              <li>Install the <a href="https://add0n.com/stylus.html" target="_blank" rel="noopener">Stylus</a> extension.</li>
+              <li>Open the userstyle below; Stylus offers to install it.</li>
+              <li>Visit <a href="https://web.stremio.com" target="_blank" rel="noopener">web.stremio.com</a>.</li>
+            </ol>
+            <div class="btn-row"><a class="btn" id="dl-stylus" href="#" target="_blank" rel="noopener">Install <span class="theme-name">theme</span> userstyle</a></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="studio">
+      <div class="wrap split">
+        <div>
+          <span class="kicker">The Studio</span>
+          <h2>Make it unmistakably yours</h2>
+          <p class="lede">Mix any palette with any art style, swap in your own images, name your rows and build collections from your favourite titles. Preview it live on a virtual TV, then install.</p>
+          <div class="features">
+            <div class="feature"><b>Your colours</b><span>Seven-colour palettes with live preview.</span></div>
+            <div class="feature"><b>Your images</b><span>Replace any title's poster, the add-on logo and backdrop.</span></div>
+            <div class="feature"><b>Your rows</b><span>Rename, reorder, reshape: poster, widescreen or square.</span></div>
+            <div class="feature"><b>Your collections</b><span>Search titles and build rows of your own.</span></div>
+          </div>
+          <a class="btn" href="studio.html">Open the Studio</a>
+        </div>
+        <div class="tv-wrap"><div class="tv"><div class="tv-screen" id="wall"></div></div></div>
+      </div>
+    </section>
+
+    <section class="block" id="lineup">
+      <div class="wrap split">
+        <div>
+          <span class="kicker">Lineup · beta</span>
+          <h2>Put your theme front and center</h2>
+          <p class="lede">Stremio orders home rows by add-on. Lineup reorders them and hides rows you don't want, straight from your browser, so Marquee leads your TV's home screen.</p>
+          <a class="btn" href="lineup.html">Open Lineup</a>
+        </div>
+        <div class="faq">
+          <details><summary>Is my password safe?</summary><p>Lineup runs entirely in your browser and talks only to Stremio's own API (api.strem.io). Nothing is stored or sent anywhere else. You can also paste an auth key instead of a password.</p></details>
+          <details><summary>Can I undo it?</summary><p>Every save downloads a backup of your add-on list first, and Lineup can restore it in one click.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="faq">
+      <div class="wrap">
+        <div class="section-head"><div><span class="kicker">FAQ</span><h2>Questions</h2></div></div>
+        <div class="faq">
+          <details><summary>Why can't an add-on recolor the Stremio app itself?</summary><p>Stremio add-ons speak a data protocol: they return catalogs, metadata, streams and subtitles. They can't inject styles into the app. So on TVs and phones Marquee themes what add-ons control (the posters, rows and images on your home screen), and on desktop and web it adds full CSS themes.</p></details>
+          <details><summary>Does Marquee stream anything?</summary><p>No. Marquee only provides themed catalog rows. Titles keep their real IMDb IDs, so your existing stream add-ons, watch history and library all work exactly as before.</p></details>
+          <details><summary>Do I need to run a server?</summary><p>Not for the eight ready-made themes. They're static files on GitHub Pages, rebuilt daily so trending rows stay fresh. Fully custom setups from the Studio need a free server, which you can deploy in one click.</p></details>
+          <details><summary>Where does the data come from?</summary><p>From Cinemeta, the same open catalog Stremio uses for its own home screen. The art is generated from each title's name, year, genres and rating, so no studio artwork is copied.</p></details>
+          <details><summary>Will it slow down my TV?</summary><p>Posters are small, cached JPEGs (about 30&nbsp;KB each), comparable to Stremio's own.</p></details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>Marquee is a fan-made, open-source project and is not affiliated with Stremio. Title data from Cinemeta; fonts under the SIL Open Font License and Apache 2.0.</span>
+      <span><a href="https://github.com/Griffdog21/stremio-marquee">GitHub</a> · MIT</span>
+    </div>
+  </footer>
+
+  <script type="module" src="js/home.js"></script>
+</body>
+</html>

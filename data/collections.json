@@ -1,0 +1,838 @@
+{
+  "neon-nights": [
+    {
+      "id": "tt0083658",
+      "name": "Blade Runner",
+      "year": "1982"
+    },
+    {
+      "id": "tt1856101",
+      "name": "Blade Runner 2049",
+      "year": "2017"
+    },
+    {
+      "id": "tt0780504",
+      "name": "Drive",
+      "year": "2011"
+    },
+    {
+      "id": "tt1104001",
+      "name": "Tron: Legacy",
+      "year": "2010"
+    },
+    {
+      "id": "tt2872718",
+      "name": "Nightcrawler",
+      "year": "2014"
+    },
+    {
+      "id": "tt0369339",
+      "name": "Collateral",
+      "year": "2004"
+    },
+    {
+      "id": "tt0094625",
+      "name": "Akira",
+      "year": "1988"
+    },
+    {
+      "id": "tt0113568",
+      "name": "Ghost in the Shell",
+      "year": "1996"
+    },
+    {
+      "id": "tt1974419",
+      "name": "The Neon Demon",
+      "year": "2016"
+    },
+    {
+      "id": "tt1191111",
+      "name": "Enter the Void",
+      "year": "2010"
+    },
+    {
+      "id": "tt1602613",
+      "name": "Only God Forgives",
+      "year": "2013"
+    },
+    {
+      "id": "tt2911666",
+      "name": "John Wick",
+      "year": "2014"
+    },
+    {
+      "id": "tt0113277",
+      "name": "Heat",
+      "year": "1995"
+    },
+    {
+      "id": "tt0446029",
+      "name": "Scott Pilgrim vs. the World",
+      "year": "2010"
+    },
+    {
+      "id": "tt0083190",
+      "name": "Thief",
+      "year": "1981"
+    },
+    {
+      "id": "tt2406566",
+      "name": "Atomic Blonde",
+      "year": "2017"
+    },
+    {
+      "id": "tt0133093",
+      "name": "The Matrix",
+      "year": "1999"
+    },
+    {
+      "id": "tt0437086",
+      "name": "Alita: Battle Angel",
+      "year": "2019"
+    },
+    {
+      "id": "tt6998518",
+      "name": "Mandy",
+      "year": "2018"
+    },
+    {
+      "id": "tt2980592",
+      "name": "The Guest",
+      "year": "2014"
+    }
+  ],
+  "shadows-and-smoke": [
+    {
+      "id": "tt0033870",
+      "name": "The Maltese Falcon",
+      "year": "1941"
+    },
+    {
+      "id": "tt0036775",
+      "name": "Double Indemnity",
+      "year": "1944"
+    },
+    {
+      "id": "tt0041959",
+      "name": "The Third Man",
+      "year": "1950"
+    },
+    {
+      "id": "tt0043014",
+      "name": "Sunset Boulevard",
+      "year": "1950"
+    },
+    {
+      "id": "tt0052311",
+      "name": "Touch of Evil",
+      "year": "1958"
+    },
+    {
+      "id": "tt0071315",
+      "name": "Chinatown",
+      "year": "1974"
+    },
+    {
+      "id": "tt0119488",
+      "name": "L.A. Confidential",
+      "year": "1997"
+    },
+    {
+      "id": "tt0401792",
+      "name": "Sin City",
+      "year": "2005"
+    },
+    {
+      "id": "tt0209144",
+      "name": "Memento",
+      "year": "2001"
+    },
+    {
+      "id": "tt0038355",
+      "name": "The Big Sleep",
+      "year": "1946"
+    },
+    {
+      "id": "tt0037008",
+      "name": "Laura",
+      "year": "1944"
+    },
+    {
+      "id": "tt0039689",
+      "name": "Out of the Past",
+      "year": "1947"
+    },
+    {
+      "id": "tt0048261",
+      "name": "Kiss Me Deadly",
+      "year": "1955"
+    },
+    {
+      "id": "tt0393109",
+      "name": "Brick",
+      "year": "2006"
+    },
+    {
+      "id": "tt0243133",
+      "name": "The Man Who Wasn't There",
+      "year": "2001"
+    },
+    {
+      "id": "tt0166924",
+      "name": "Mulholland Drive",
+      "year": "2001"
+    },
+    {
+      "id": "tt0048424",
+      "name": "The Night of the Hunter",
+      "year": "1955"
+    },
+    {
+      "id": "tt7740496",
+      "name": "Nightmare Alley",
+      "year": "2021"
+    },
+    {
+      "id": "tt0070334",
+      "name": "The Long Goodbye",
+      "year": "1973"
+    },
+    {
+      "id": "tt0114369",
+      "name": "Seven",
+      "year": "1995"
+    }
+  ],
+  "gilded-screen": [
+    {
+      "id": "tt1343092",
+      "name": "The Great Gatsby",
+      "year": "2013"
+    },
+    {
+      "id": "tt0034583",
+      "name": "Casablanca",
+      "year": "1943"
+    },
+    {
+      "id": "tt0045152",
+      "name": "Singin' in the Rain",
+      "year": "1952"
+    },
+    {
+      "id": "tt2278388",
+      "name": "The Grand Budapest Hotel",
+      "year": "2014"
+    },
+    {
+      "id": "tt0053291",
+      "name": "Some Like It Hot",
+      "year": "1959"
+    },
+    {
+      "id": "tt10640346",
+      "name": "Babylon",
+      "year": "2022"
+    },
+    {
+      "id": "tt0299658",
+      "name": "Chicago",
+      "year": "2003"
+    },
+    {
+      "id": "tt1655442",
+      "name": "The Artist",
+      "year": "2012"
+    },
+    {
+      "id": "tt0017136",
+      "name": "Metropolis",
+      "year": "1927"
+    },
+    {
+      "id": "tt3402236",
+      "name": "Murder on the Orient Express",
+      "year": "2017"
+    },
+    {
+      "id": "tt0045810",
+      "name": "Gentlemen Prefer Blondes",
+      "year": "1953"
+    },
+    {
+      "id": "tt3783958",
+      "name": "La La Land",
+      "year": "2016"
+    },
+    {
+      "id": "tt0203009",
+      "name": "Moulin Rouge!",
+      "year": "2001"
+    },
+    {
+      "id": "tt0070735",
+      "name": "The Sting",
+      "year": "1973"
+    },
+    {
+      "id": "tt0033467",
+      "name": "Citizen Kane",
+      "year": "1941"
+    },
+    {
+      "id": "tt0027125",
+      "name": "Top Hat",
+      "year": "1935"
+    },
+    {
+      "id": "tt0068327",
+      "name": "Cabaret",
+      "year": "1972"
+    },
+    {
+      "id": "tt0338751",
+      "name": "The Aviator",
+      "year": "2004"
+    },
+    {
+      "id": "tt0046250",
+      "name": "Roman Holiday",
+      "year": "1953"
+    },
+    {
+      "id": "tt0054698",
+      "name": "Breakfast at Tiffany's",
+      "year": "1961"
+    }
+  ],
+  "be-kind-rewind": [
+    {
+      "id": "tt0088763",
+      "name": "Back to the Future",
+      "year": "1985"
+    },
+    {
+      "id": "tt0089218",
+      "name": "The Goonies",
+      "year": "1985"
+    },
+    {
+      "id": "tt0083866",
+      "name": "E.T. the Extra-Terrestrial",
+      "year": "1982"
+    },
+    {
+      "id": "tt0087332",
+      "name": "Ghostbusters",
+      "year": "1984"
+    },
+    {
+      "id": "tt0088247",
+      "name": "The Terminator",
+      "year": "1984"
+    },
+    {
+      "id": "tt0091042",
+      "name": "Ferris Bueller's Day Off",
+      "year": "1986"
+    },
+    {
+      "id": "tt0095016",
+      "name": "Die Hard",
+      "year": "1988"
+    },
+    {
+      "id": "tt0088847",
+      "name": "The Breakfast Club",
+      "year": "1985"
+    },
+    {
+      "id": "tt0093773",
+      "name": "Predator",
+      "year": "1987"
+    },
+    {
+      "id": "tt0093870",
+      "name": "RoboCop",
+      "year": "1987"
+    },
+    {
+      "id": "tt0087363",
+      "name": "Gremlins",
+      "year": "1984"
+    },
+    {
+      "id": "tt0107290",
+      "name": "Jurassic Park",
+      "year": "1993"
+    },
+    {
+      "id": "tt0099785",
+      "name": "Home Alone",
+      "year": "1990"
+    },
+    {
+      "id": "tt0100802",
+      "name": "Total Recall",
+      "year": "1990"
+    },
+    {
+      "id": "tt0090728",
+      "name": "Big Trouble in Little China",
+      "year": "1986"
+    },
+    {
+      "id": "tt0096256",
+      "name": "They Live",
+      "year": "1988"
+    },
+    {
+      "id": "tt0102685",
+      "name": "Point Break",
+      "year": "1991"
+    },
+    {
+      "id": "tt0092005",
+      "name": "Stand by Me",
+      "year": "1986"
+    },
+    {
+      "id": "tt0093779",
+      "name": "The Princess Bride",
+      "year": "1987"
+    },
+    {
+      "id": "tt0082971",
+      "name": "Raiders of the Lost Ark",
+      "year": "1981"
+    }
+  ],
+  "form-and-function": [
+    {
+      "id": "tt0062622",
+      "name": "2001: A Space Odyssey",
+      "year": "1968"
+    },
+    {
+      "id": "tt0062136",
+      "name": "Playtime",
+      "year": "1973"
+    },
+    {
+      "id": "tt1798709",
+      "name": "Her",
+      "year": "2014"
+    },
+    {
+      "id": "tt0119177",
+      "name": "Gattaca",
+      "year": "1997"
+    },
+    {
+      "id": "tt1748122",
+      "name": "Moonrise Kingdom",
+      "year": "2012"
+    },
+    {
+      "id": "tt0265666",
+      "name": "The Royal Tenenbaums",
+      "year": "2002"
+    },
+    {
+      "id": "tt5990474",
+      "name": "Columbus",
+      "year": "2017"
+    },
+    {
+      "id": "tt0118694",
+      "name": "In the Mood for Love",
+      "year": "2001"
+    },
+    {
+      "id": "tt0211915",
+      "name": "Amélie",
+      "year": "2002"
+    },
+    {
+      "id": "tt5247022",
+      "name": "Paterson",
+      "year": "2016"
+    },
+    {
+      "id": "tt14444726",
+      "name": "Tár",
+      "year": "2022"
+    },
+    {
+      "id": "tt14230388",
+      "name": "Asteroid City",
+      "year": "2023"
+    },
+    {
+      "id": "tt6751668",
+      "name": "Parasite",
+      "year": "2019"
+    },
+    {
+      "id": "tt8847712",
+      "name": "The French Dispatch",
+      "year": "2021"
+    },
+    {
+      "id": "tt0050706",
+      "name": "My Uncle",
+      "year": "1958"
+    },
+    {
+      "id": "tt0335266",
+      "name": "Lost in Translation",
+      "year": "2003"
+    },
+    {
+      "id": "tt1315981",
+      "name": "A Single Man",
+      "year": "2010"
+    },
+    {
+      "id": "tt5776858",
+      "name": "Phantom Thread",
+      "year": "2017"
+    },
+    {
+      "id": "tt13238346",
+      "name": "Past Lives",
+      "year": "2023"
+    },
+    {
+      "id": "tt27503384",
+      "name": "Perfect Days",
+      "year": "2023"
+    }
+  ],
+  "ghosts-in-the-machine": [
+    {
+      "id": "tt0086567",
+      "name": "WarGames",
+      "year": "1983"
+    },
+    {
+      "id": "tt0113243",
+      "name": "Hackers",
+      "year": "1995"
+    },
+    {
+      "id": "tt0105435",
+      "name": "Sneakers",
+      "year": "1992"
+    },
+    {
+      "id": "tt1285016",
+      "name": "The Social Network",
+      "year": "2010"
+    },
+    {
+      "id": "tt0470752",
+      "name": "Ex Machina",
+      "year": "2015"
+    },
+    {
+      "id": "tt0084827",
+      "name": "Tron",
+      "year": "1982"
+    },
+    {
+      "id": "tt0181689",
+      "name": "Minority Report",
+      "year": "2002"
+    },
+    {
+      "id": "tt0390384",
+      "name": "Primer",
+      "year": "2005"
+    },
+    {
+      "id": "tt0945513",
+      "name": "Source Code",
+      "year": "2011"
+    },
+    {
+      "id": "tt2084970",
+      "name": "The Imitation Game",
+      "year": "2014"
+    },
+    {
+      "id": "tt2717822",
+      "name": "Blackhat",
+      "year": "2015"
+    },
+    {
+      "id": "tt6499752",
+      "name": "Upgrade",
+      "year": "2018"
+    },
+    {
+      "id": "tt7668870",
+      "name": "Searching",
+      "year": "2018"
+    },
+    {
+      "id": "tt0113481",
+      "name": "Johnny Mnemonic",
+      "year": "1995"
+    },
+    {
+      "id": "tt0120907",
+      "name": "eXistenZ",
+      "year": "1999"
+    },
+    {
+      "id": "tt3042408",
+      "name": "Who Am I",
+      "year": "2014"
+    },
+    {
+      "id": "tt0138704",
+      "name": "Pi",
+      "year": "1998"
+    },
+    {
+      "id": "tt0064177",
+      "name": "Colossus: The Forbin Project",
+      "year": "1970"
+    },
+    {
+      "id": "tt0113957",
+      "name": "The Net",
+      "year": "1995"
+    },
+    {
+      "id": "tt0103064",
+      "name": "Terminator 2: Judgment Day",
+      "year": "1991"
+    }
+  ],
+  "midnight-monsters": [
+    {
+      "id": "tt0077651",
+      "name": "Halloween",
+      "year": "1978"
+    },
+    {
+      "id": "tt0081505",
+      "name": "The Shining",
+      "year": "1980"
+    },
+    {
+      "id": "tt7784604",
+      "name": "Hereditary",
+      "year": "2018"
+    },
+    {
+      "id": "tt5052448",
+      "name": "Get Out",
+      "year": "2017"
+    },
+    {
+      "id": "tt0070047",
+      "name": "The Exorcist",
+      "year": "1973"
+    },
+    {
+      "id": "tt0087800",
+      "name": "A Nightmare on Elm Street",
+      "year": "1984"
+    },
+    {
+      "id": "tt0084787",
+      "name": "The Thing",
+      "year": "1982"
+    },
+    {
+      "id": "tt0117571",
+      "name": "Scream",
+      "year": "1996"
+    },
+    {
+      "id": "tt0107120",
+      "name": "Hocus Pocus",
+      "year": "1993"
+    },
+    {
+      "id": "tt0094721",
+      "name": "Beetlejuice",
+      "year": "1988"
+    },
+    {
+      "id": "tt1457767",
+      "name": "The Conjuring",
+      "year": "2013"
+    },
+    {
+      "id": "tt3235888",
+      "name": "It Follows",
+      "year": "2015"
+    },
+    {
+      "id": "tt4263482",
+      "name": "The Witch",
+      "year": "2016"
+    },
+    {
+      "id": "tt0862856",
+      "name": "Trick 'r Treat",
+      "year": "2015"
+    },
+    {
+      "id": "tt0107688",
+      "name": "The Nightmare Before Christmas",
+      "year": "1993"
+    },
+    {
+      "id": "tt0054215",
+      "name": "Psycho",
+      "year": "1960"
+    },
+    {
+      "id": "tt5040012",
+      "name": "Nosferatu",
+      "year": "2024"
+    },
+    {
+      "id": "tt10638522",
+      "name": "Talk to Me",
+      "year": "2023"
+    },
+    {
+      "id": "tt8772262",
+      "name": "Midsommar",
+      "year": "2019"
+    },
+    {
+      "id": "tt2321549",
+      "name": "The Babadook",
+      "year": "2014"
+    },
+    {
+      "id": "tt0063350",
+      "name": "Night of the Living Dead",
+      "year": "1968"
+    },
+    {
+      "id": "tt0327597",
+      "name": "Coraline",
+      "year": "2009"
+    },
+    {
+      "id": "tt0092991",
+      "name": "Evil Dead II",
+      "year": "1987"
+    },
+    {
+      "id": "tt31193180",
+      "name": "Sinners",
+      "year": "2025"
+    }
+  ],
+  "otherworldly": [
+    {
+      "id": "tt0816692",
+      "name": "Interstellar",
+      "year": "2014"
+    },
+    {
+      "id": "tt0118884",
+      "name": "Contact",
+      "year": "1997"
+    },
+    {
+      "id": "tt1160419",
+      "name": "Dune",
+      "year": "2021"
+    },
+    {
+      "id": "tt15239678",
+      "name": "Dune: Part Two",
+      "year": "2024"
+    },
+    {
+      "id": "tt2798920",
+      "name": "Annihilation",
+      "year": "2018"
+    },
+    {
+      "id": "tt1454468",
+      "name": "Gravity",
+      "year": "2013"
+    },
+    {
+      "id": "tt0499549",
+      "name": "Avatar",
+      "year": "2009"
+    },
+    {
+      "id": "tt0069293",
+      "name": "Solaris",
+      "year": "1972"
+    },
+    {
+      "id": "tt0245429",
+      "name": "Spirited Away",
+      "year": "2003"
+    },
+    {
+      "id": "tt0119698",
+      "name": "Princess Mononoke",
+      "year": "1997"
+    },
+    {
+      "id": "tt0454876",
+      "name": "Life of Pi",
+      "year": "2012"
+    },
+    {
+      "id": "tt1663202",
+      "name": "The Revenant",
+      "year": "2016"
+    },
+    {
+      "id": "tt0359950",
+      "name": "The Secret Life of Walter Mitty",
+      "year": "2013"
+    },
+    {
+      "id": "tt2543164",
+      "name": "Arrival",
+      "year": "2016"
+    },
+    {
+      "id": "tt0075860",
+      "name": "Close Encounters of the Third Kind",
+      "year": "1977"
+    },
+    {
+      "id": "tt6710474",
+      "name": "Everything Everywhere All at Once",
+      "year": "2022"
+    },
+    {
+      "id": "tt0910970",
+      "name": "WALL·E",
+      "year": "2008"
+    },
+    {
+      "id": "tt0892769",
+      "name": "How to Train Your Dragon",
+      "year": "2010"
+    },
+    {
+      "id": "tt2380307",
+      "name": "Coco",
+      "year": "2017"
+    },
+    {
+      "id": "tt0087544",
+      "name": "Nausicaä of the Valley of the Wind",
+      "year": "1987"
+    }
+  ]
+}

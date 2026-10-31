@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marquee Studio · Design your Stremio theme</title>
+  <meta name="description" content="Design a custom Stremio theme: colours, art styles, row names, card shapes, your own posters and collections, with a live TV preview.">
+  <meta name="theme-color" content="#0b0618">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/site.css">
+  <link rel="stylesheet" href="css/studio.css">
+</head>
+<body>
+  <nav class="nav" aria-label="Main">
+    <div class="wrap">
+      <a class="brand" href="./"><span class="brand-mark" aria-hidden="true">M</span><span class="brand-name">Marquee</span></a>
+      <div class="nav-links">
+        <a href="./#themes" class="hide-sm">Themes</a>
+        <a href="studio.html" aria-current="page">Studio</a>
+        <a href="lineup.html">Lineup</a>
+        <a class="gh" href="https://github.com/Griffdog21/stremio-marquee" aria-label="GitHub repository"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="hide-sm">GitHub</span></a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrap studio">
+    <header class="studio-head">
+      <span class="kicker">The Studio</span>
+      <h1>Design your Marquee</h1>
+      <p class="lede">Every change shows up on the virtual TV straight away. When it looks right, install it, or take the matching theme to Stremio on your desktop.</p>
+    </header>
+
+    <div class="studio-grid">
+      <div class="controls">
+        <section class="panel">
+          <h3>Theme</h3>
+          <div class="chips" id="theme-chips" role="group" aria-label="Theme"></div>
+          <p class="hint">Picking a theme loads its colours, art style, collection and mood row.</p>
+        </section>
+
+        <section class="panel">
+          <h3>Art</h3>
+          <div class="grid-2">
+            <label class="field">Art style
+              <select id="template"></select>
+            </label>
+            <label class="field">Posters
+              <select id="art">
+                <option value="art">Generated art</option>
+                <option value="original">Original posters</option>
+              </select>
+            </label>
+          </div>
+          <p class="hint">Mix and match: Bauhaus geometry in neon colours, a VHS sleeve in noir greys…</p>
+        </section>
+
+        <section class="panel">
+          <h3>Colours <button class="btn small ghost" id="reset-colors" type="button">Reset</button></h3>
+          <div class="swatch-field" id="colors"></div>
+        </section>
+
+        <section class="panel">
+          <h3>Rows</h3>
+          <div id="rows" class="rows"></div>
+          <div class="grid-2" style="margin-top:14px">
+            <div class="field">
+              <label class="field" for="prefix">Row prefix (emoji or symbol)</label>
+              <input type="text" id="prefix" maxlength="4" autocomplete="off">
+              <label class="hint" style="display:flex;gap:8px;align-items:center;margin:4px 0 0"><input type="checkbox" id="no-prefix"> No prefix</label>
+            </div>
+            <label class="field">Titles per row: <output id="count-out">40</output>
+              <input type="range" id="count" min="10" max="100" step="5">
+            </label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h3>Your collections <button class="btn small ghost" id="add-collection" type="button">+ New</button></h3>
+          <div id="collections"></div>
+          <p class="hint" id="collections-empty">Build a row out of your favourite titles: search Cinemeta, or paste IMDb links.</p>
+        </section>
+
+        <section class="panel">
+          <h3>Your images</h3>
+          <div class="grid-2">
+            <label class="field">Add-on logo URL
+              <input type="url" id="logo" placeholder="https://…/logo.png" autocomplete="off">
+            </label>
+            <label class="field">Add-on backdrop URL
+              <input type="url" id="background" placeholder="https://…/backdrop.jpg" autocomplete="off">
+            </label>
+          </div>
+          <h4 class="sub">Poster swaps</h4>
+          <p class="hint" style="margin-top:0">Replace any title's poster with an image of your own (a fan poster, a photo, anything with a public URL).</p>
+          <div class="swap-form">
+            <input type="search" id="swap-search" placeholder="Find a title…" autocomplete="off" aria-label="Find a title to swap">
+            <div class="results" id="swap-results"></div>
+          </div>
+          <div id="swaps" class="swaps"></div>
+        </section>
+      </div>
+
+      <div class="preview-col">
+        <div class="tv-wrap">
+          <div class="tv"><div class="tv-screen" id="preview" aria-label="Live preview of your Stremio home screen" role="img"></div></div>
+        </div>
+        <div class="closeups" id="closeups" aria-hidden="true"></div>
+
+        <section class="panel" id="install-panel">
+          <h3>Install</h3>
+          <div id="install-body"></div>
+        </section>
+
+        <section class="panel">
+          <h3>Desktop &amp; web theme</h3>
+          <p class="hint" style="margin-top:0">The same palette as a full UI theme for Stremio Enhanced or Stremio Web (Stylus).</p>
+          <div class="btn-row">
+            <button class="btn small" id="dl-enhanced" type="button">Download .theme.css</button>
+            <button class="btn small ghost" id="dl-stylus" type="button">Download .user.css</button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h3>Share</h3>
+          <div class="url-box"><code id="share-url">…</code><button class="btn small ghost" id="copy-share" type="button">Copy</button></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>Marquee is a fan-made, open-source project and is not affiliated with Stremio.</span>
+      <span><a href="https://github.com/Griffdog21/stremio-marquee">GitHub</a> · MIT</span>
+    </div>
+  </footer>
+  <script type="module" src="js/studio.js"></script>
+</body>
+</html>

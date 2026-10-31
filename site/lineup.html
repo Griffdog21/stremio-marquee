@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marquee Lineup · Reorder your Stremio home screen</title>
+  <meta name="description" content="Reorder Stremio's home-screen rows and hide the ones you don't want, on every device including Google TV.">
+  <meta name="theme-color" content="#0b0618">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/site.css">
+  <link rel="stylesheet" href="css/studio.css">
+</head>
+<body>
+  <nav class="nav" aria-label="Main">
+    <div class="wrap">
+      <a class="brand" href="./"><span class="brand-mark" aria-hidden="true">M</span><span class="brand-name">Marquee</span></a>
+      <div class="nav-links">
+        <a href="./#themes" class="hide-sm">Themes</a>
+        <a href="studio.html">Studio</a>
+        <a href="lineup.html" aria-current="page">Lineup</a>
+        <a class="gh" href="https://github.com/Griffdog21/stremio-marquee" aria-label="GitHub repository"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="hide-sm">GitHub</span></a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrap studio">
+    <header class="studio-head">
+      <span class="kicker">Lineup · beta</span>
+      <h1>Set your home-screen lineup</h1>
+      <p class="lede">Stremio lists home rows add-on by add-on, in the order they're installed. Lineup reorders them and hides the rows you don't want, and the change follows your account to every device, Google TV included.</p>
+    </header>
+
+    <div class="lineup-grid">
+      <div>
+        <section class="panel" id="connect">
+          <h3>Connect your Stremio account</h3>
+          <form id="login" class="grid-2" autocomplete="on">
+            <label class="field">Email <input type="email" id="email" autocomplete="username" required></label>
+            <label class="field">Password <input type="password" id="password" autocomplete="current-password" required></label>
+            <div class="btn-row" style="grid-column:1/-1"><button class="btn" type="submit" id="login-btn">Connect</button></div>
+          </form>
+          <details style="margin-top:12px">
+            <summary class="hint" style="cursor:pointer">Use an auth key instead</summary>
+            <p class="hint">On web.stremio.com (signed in), open the browser console and run <code>JSON.parse(localStorage.getItem("profile")).auth.key</code>, then paste the result here.</p>
+            <form id="key-form" class="btn-row">
+              <input type="password" id="authkey" placeholder="Auth key" aria-label="Stremio auth key" style="flex:1;min-width:200px">
+              <button class="btn ghost" type="submit">Use key</button>
+            </form>
+          </details>
+          <p class="status" id="connect-status" role="status"></p>
+        </section>
+
+        <section id="editor" hidden>
+          <div class="panel" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between">
+            <div class="btn-row">
+              <button class="btn small" type="button" id="marquee-top">Marquee to the top</button>
+              <button class="btn small ghost" type="button" id="backup">Download backup</button>
+              <label class="btn small ghost" style="cursor:pointer">Restore backup…<input type="file" id="restore" accept="application/json,.json" hidden></label>
+            </div>
+            <div class="btn-row">
+              <button class="btn small ghost" type="button" id="disconnect">Disconnect</button>
+              <button class="btn small" type="button" id="save" disabled>Save to Stremio</button>
+            </div>
+          </div>
+          <p class="status" id="save-status" role="status"></p>
+          <div class="addons" id="addons"></div>
+        </section>
+      </div>
+
+      <aside>
+        <section class="panel">
+          <h3>How it works</h3>
+          <ul class="hint" style="padding-left:18px;display:grid;gap:8px;margin:0">
+            <li>Everything runs in this browser tab. Your login goes only to Stremio's own API (<code>api.strem.io</code>) and is forgotten when you close the tab.</li>
+            <li>Nothing changes until you press <b>Save to Stremio</b>, and every save downloads a backup of your add-on list first.</li>
+            <li>Hidden rows are removed from Stremio's saved copy of that add-on. If the add-on updates itself later, its rows may come back; just run Lineup again.</li>
+            <li>“Continue Watching” always stays at the top. Stremio doesn't let add-ons move it.</li>
+          </ul>
+        </section>
+        <section class="panel">
+          <h3>Careful with Cinemeta</h3>
+          <p class="hint" style="margin:0">Stremio's search for movies and series runs through Cinemeta's <b>Popular</b> rows. Hide those only if another add-on of yours also provides search.</p>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>Marquee is a fan-made, open-source project and is not affiliated with Stremio.</span>
+      <span><a href="https://github.com/Griffdog21/stremio-marquee">GitHub</a> · MIT</span>
+    </div>
+  </footer>
+  <script type="module" src="js/lineup.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{
+  "name": "stremio-marquee",
+  "version": "1.0.0",
+  "description": "A theme engine for Stremio: generative themed poster art, spotlight rows, your own images, and matching desktop/web themes. Works on every Stremio app, Google TV included.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Griffdog21",
+  "homepage": "https://griffdog21.github.io/stremio-marquee/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Griffdog21/stremio-marquee.git"
+  },
+  "keywords": [
+    "stremio",
+    "stremio-addon",
+    "themes",
+    "posters",
+    "google-tv",
+    "android-tv",
+    "customization"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "build:site": "node scripts/build.js --site-only",
+    "start": "node src/server/server.js",
+    "serve": "node scripts/serve.js",
+    "test": "node --test test/",
+    "metrics": "node scripts/font-metrics.js",
+    "contact-sheet": "node scripts/contact-sheet.js",
+    "collections": "node scripts/resolve-collections.js",
+    "readme-assets": "node scripts/readme-assets.js"
+  },
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "qrcode-generator": "^2.0.4"
+  },
+  "devDependencies": {
+    "opentype.js": "^2.0.0",
+    "stremio-addon-linter": "^1.7.0"
+  },
+  "optionalDependencies": {
+    "sharp": "^0.35.5"
+  }
+}

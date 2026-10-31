@@ -1,0 +1,26 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build:site",
+  "outputDirectory": "dist",
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "{data,fonts}/**",
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    { "source": "/manifest.json", "destination": "/api/index" },
+    { "source": "/configure", "destination": "/api/index" },
+    { "source": "/catalog/:path*", "destination": "/api/index" },
+    { "source": "/art/:path*", "destination": "/api/index" },
+    { "source": "/logo.png", "destination": "/api/index" },
+    { "source": "/background.:ext(jpg|png)", "destination": "/api/index" },
+    { "source": "/:config(eyJ[A-Za-z0-9_-]+)/:path*", "destination": "/api/index" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }]
+    }
+  ]
+}

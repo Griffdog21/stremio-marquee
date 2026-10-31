@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: stremio-marquee
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build:site
+    startCommand: npm start
+    healthCheckPath: /manifest.json
+    envVars:
+      - key: NODE_VERSION
+        value: "24"

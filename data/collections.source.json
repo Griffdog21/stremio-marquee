@@ -1,0 +1,59 @@
+{
+  "neon-nights": [
+    ["Blade Runner", 1982], ["Blade Runner 2049", 2017], ["Drive", 2011], ["Tron: Legacy", 2010],
+    ["Nightcrawler", 2014], ["Collateral", 2004], ["Akira", 1988], ["Ghost in the Shell", 1995],
+    ["The Neon Demon", 2016], ["Enter the Void", 2009], ["Only God Forgives", 2013], ["John Wick", 2014],
+    ["Heat", 1995], ["Scott Pilgrim vs. the World", 2010], ["Thief", 1981], ["Atomic Blonde", 2017],
+    ["The Matrix", 1999], ["Alita: Battle Angel", 2019], ["Mandy", 2018], ["The Guest", 2014]
+  ],
+  "shadows-and-smoke": [
+    ["The Maltese Falcon", 1941], ["Double Indemnity", 1944], ["The Third Man", 1949], ["Sunset Boulevard", 1950],
+    ["Touch of Evil", 1958], ["Chinatown", 1974], ["L.A. Confidential", 1997], ["Sin City", 2005],
+    ["Memento", 2000], ["The Big Sleep", 1946], ["Laura", 1944], ["Out of the Past", 1947],
+    ["Kiss Me Deadly", 1955], ["Brick", 2005], ["The Man Who Wasn't There", 2001], ["Mulholland Drive", 2001],
+    ["The Night of the Hunter", 1955], ["Nightmare Alley", 2021], ["The Long Goodbye", 1973], ["Se7en", 1995, "tt0114369"]
+  ],
+  "gilded-screen": [
+    ["The Great Gatsby", 2013], ["Casablanca", 1942], ["Singin' in the Rain", 1952], ["The Grand Budapest Hotel", 2014],
+    ["Some Like It Hot", 1959], ["Babylon", 2022], ["Chicago", 2002], ["The Artist", 2011],
+    ["Metropolis", 1927], ["Murder on the Orient Express", 2017], ["Gentlemen Prefer Blondes", 1953], ["La La Land", 2016],
+    ["Moulin Rouge!", 2001], ["The Sting", 1973], ["Citizen Kane", 1941], ["Top Hat", 1935],
+    ["Cabaret", 1972], ["The Aviator", 2004], ["Roman Holiday", 1953], ["Breakfast at Tiffany's", 1961]
+  ],
+  "be-kind-rewind": [
+    ["Back to the Future", 1985], ["The Goonies", 1985], ["E.T. the Extra-Terrestrial", 1982], ["Ghostbusters", 1984],
+    ["The Terminator", 1984], ["Ferris Bueller's Day Off", 1986], ["Die Hard", 1988], ["The Breakfast Club", 1985],
+    ["Predator", 1987], ["RoboCop", 1987], ["Gremlins", 1984], ["Jurassic Park", 1993],
+    ["Home Alone", 1990], ["Total Recall", 1990], ["Big Trouble in Little China", 1986], ["They Live", 1988],
+    ["Point Break", 1991], ["Stand by Me", 1986], ["The Princess Bride", 1987], ["Raiders of the Lost Ark", 1981]
+  ],
+  "form-and-function": [
+    ["2001: A Space Odyssey", 1968], ["Playtime", 1967, "tt0062136"], ["Her", 2013], ["Gattaca", 1997],
+    ["Moonrise Kingdom", 2012], ["The Royal Tenenbaums", 2001], ["Columbus", 2017], ["In the Mood for Love", 2000],
+    ["Amélie", 2001], ["Paterson", 2016], ["Tár", 2022], ["Asteroid City", 2023],
+    ["Parasite", 2019], ["The French Dispatch", 2021], ["Mon Oncle", 1958, "tt0050706"], ["Lost in Translation", 2003],
+    ["A Single Man", 2009], ["Phantom Thread", 2017], ["Past Lives", 2023], ["Perfect Days", 2023]
+  ],
+  "ghosts-in-the-machine": [
+    ["WarGames", 1983], ["Hackers", 1995], ["Sneakers", 1992], ["The Social Network", 2010],
+    ["Ex Machina", 2014], ["Tron", 1982], ["Minority Report", 2002], ["Primer", 2004],
+    ["Source Code", 2011], ["The Imitation Game", 2014], ["Blackhat", 2015], ["Upgrade", 2018],
+    ["Searching", 2018], ["Johnny Mnemonic", 1995], ["eXistenZ", 1999], ["Who Am I", 2014],
+    ["Pi", 1998], ["Colossus: The Forbin Project", 1970], ["The Net", 1995], ["Terminator 2: Judgment Day", 1991]
+  ],
+  "midnight-monsters": [
+    ["Halloween", 1978], ["The Shining", 1980], ["Hereditary", 2018], ["Get Out", 2017],
+    ["The Exorcist", 1973], ["A Nightmare on Elm Street", 1984], ["The Thing", 1982], ["Scream", 1996],
+    ["Hocus Pocus", 1993], ["Beetlejuice", 1988], ["The Conjuring", 2013], ["It Follows", 2014],
+    ["The Witch", 2015], ["Trick 'r Treat", 2007, "tt0862856"], ["The Nightmare Before Christmas", 1993], ["Psycho", 1960],
+    ["Nosferatu", 2024], ["Talk to Me", 2022], ["Midsommar", 2019], ["The Babadook", 2014],
+    ["Night of the Living Dead", 1968], ["Coraline", 2009], ["Evil Dead II", 1987], ["Sinners", 2025]
+  ],
+  "otherworldly": [
+    ["Interstellar", 2014], ["Contact", 1997], ["Dune", 2021], ["Dune: Part Two", 2024],
+    ["Annihilation", 2018], ["Gravity", 2013], ["Avatar", 2009], ["Solaris", 1972],
+    ["Spirited Away", 2001, "tt0245429"], ["Princess Mononoke", 1997], ["Life of Pi", 2012], ["The Revenant", 2015],
+    ["The Secret Life of Walter Mitty", 2013], ["Arrival", 2016], ["Close Encounters of the Third Kind", 1977], ["Everything Everywhere All at Once", 2022],
+    ["WALL·E", 2008], ["How to Train Your Dragon", 2010], ["Coco", 2017], ["Nausicaä of the Valley of the Wind", 1984, "tt0087544"]
+  ]
+}
