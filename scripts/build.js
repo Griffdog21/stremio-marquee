@@ -127,7 +127,8 @@ async function buildAddons() {
       const items = (await loadRowItems(row)).slice(0, cfg.count);
       loaded.push({ row, items });
       const artUrl = (it, shape) => `${base}/art/${SHAPE_CODES[shape]}/${it.id}.${IMAGE_EXT}`;
-      json(`${dir}/catalog/${row.type}/${row.catalogId}.json`, { metas: toMetas({ row, items, cfg, artUrl }), cacheMaxAge: 43200 });
+      // Art is regenerated daily, so keep client caches shorter than a rebuild cycle.
+      json(`${dir}/catalog/${row.type}/${row.catalogId}.json`, { metas: toMetas({ row, items, cfg, artUrl }), cacheMaxAge: 14400 });
       if (row.id === 'movies' && !sample.movies.length) sample.movies = items.slice(0, 16).map(slim);
       if (row.id === 'series' && !sample.series.length) sample.series = items.slice(0, 16).map(slim);
       if (row.id === 'mood') sample.mood[theme.id] = items.slice(0, 10).map(slim);
