@@ -48,7 +48,8 @@ export async function siteInfo() {
   return { base: new URL('.', location.href).href.replace(/\/$/, ''), imageExt: 'jpg' };
 }
 
-export const presetManifest = (base, id) => `${base}/addon/${id}/manifest.json`;
+// Every stock theme also ships a real-poster twin at addon/<id>-classic/.
+export const presetManifest = (base, id, real = false) => `${base}/addon/${id}${real ? '-classic' : ''}/manifest.json`;
 export const stremioLink = (url) => url.replace(/^https?:\/\//, 'stremio://');
 export const webInstallLink = (url) => `https://web.stremio.com/#/addons?addon=${encodeURIComponent(url)}`;
 

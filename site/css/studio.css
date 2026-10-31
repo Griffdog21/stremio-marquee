@@ -39,6 +39,9 @@ h4.sub { font: 700 0.8rem/1 var(--mono); letter-spacing: 0.14em; text-transform:
 .swap img { width: 44px; height: 66px; object-fit: cover; border-radius: 6px; background: #222; }
 .swap .field input { min-height: 36px; }
 
+details.more { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+details.more summary { cursor: pointer; font-size: 0.88rem; font-weight: 600; color: color-mix(in srgb, var(--text) 80%, transparent); }
+.error { color: #ff6b6b; font-size: 0.85rem; margin: 6px 0 0; }
 .install-grid { display: grid; grid-template-columns: minmax(0, 1fr) 150px; gap: 16px; align-items: start; }
 @media (max-width: 560px) { .install-grid { grid-template-columns: 1fr; } }
 .install-grid .qr-card { padding: 10px; border-radius: 14px; }

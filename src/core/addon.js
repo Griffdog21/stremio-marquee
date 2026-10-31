@@ -7,6 +7,8 @@ import { VERSION } from './version.js';
 export const SHAPE_CODES = { poster: 'p', landscape: 'l', square: 's' };
 export const SHAPE_FROM_CODE = { p: 'poster', l: 'landscape', s: 'square' };
 
+// Stremio shows rows as "<name> - Movie" / "<name> - Series", so names never
+// repeat the type.
 export function rowDefs(theme, year = new Date().getFullYear()) {
   return {
     spotlight: {
@@ -14,11 +16,11 @@ export function rowDefs(theme, year = new Date().getFullYear()) {
       source: { kind: 'collection', id: theme.collection.id },
     },
     movies: {
-      type: 'movie', name: 'Trending Movies', shape: 'poster',
+      type: 'movie', name: 'Trending', shape: 'poster',
       source: { kind: 'cinemeta', type: 'movie', catalog: 'top' },
     },
     series: {
-      type: 'series', name: 'Trending Series', shape: 'poster',
+      type: 'series', name: 'Trending', shape: 'poster',
       source: { kind: 'cinemeta', type: 'series', catalog: 'top' },
     },
     mood: {
@@ -57,19 +59,36 @@ export function resolveRows(cfg) {
 }
 
 /**
- * preset: true for the ready-made themes hosted on GitHub Pages. Custom
- * configurations get their own id so several can be installed side by side.
+ * What makes each add-on's id unique, so several can be installed side by side:
+ * stock themes 'haunt', real-poster variants 'haunt.classic', published presets
+ * 'preset.<slug>', and live custom setups '<theme>.<hash of config>'.
  */
-export function buildManifest({ cfg, base, preset = false, token = '', ext = 'png' }) {
+export function addonKey({ cfg, variant = 'stock', slug = '', token = '' }) {
+  const id = getTheme(cfg.theme).id;
+  if (variant === 'stock') return id;
+  if (variant === 'classic') return `${id}.classic`;
+  if (variant === 'preset') return `preset.${slug}`;
+  return token ? `${id}.${seedFrom(token).toString(36)}` : `${id}.live`;
+}
+
+export function defaultName(cfg, variant = 'stock') {
+  const theme = getTheme(cfg.theme);
+  if (variant === 'stock') return `Marquee · ${theme.name}`;
+  if (variant === 'classic') return `Marquee · ${theme.name} · Real posters`;
+  return `Marquee · ${theme.name} (custom)`;
+}
+
+/** assetBase: where logo.png and the backdrop live, if not alongside (real-poster twins share them). */
+export function buildManifest({ cfg, base, variant = 'stock', slug = '', token = '', ext = 'png', assetBase = base }) {
   const theme = getTheme(cfg.theme);
   const rows = resolveRows(cfg);
   return {
-    id: preset ? `community.marquee.${theme.id}` : `community.marquee.${theme.id}.${seedFrom(token).toString(36)}`,
+    id: `community.marquee.${addonKey({ cfg, variant, slug, token })}`,
     version: VERSION,
-    name: preset ? `Marquee · ${theme.name}` : `Marquee · ${theme.name} (custom)`,
-    description: `${theme.tagline} Marquee re-themes your Stremio home screen with original poster art, widescreen spotlight rows and curated collections, on every Stremio app including Google TV and Android TV.`,
-    logo: cfg.logo || `${base}/logo.png`,
-    background: cfg.background || `${base}/background.${ext}`,
+    name: cfg.title || defaultName(cfg, variant),
+    description: `${theme.tagline} Marquee re-themes your Stremio home screen with ${cfg.art === 'original' ? 'curated rows, widescreen spotlights and collections' : 'original poster art, widescreen spotlight rows and curated collections'}, on every Stremio app including Google TV and Android TV.`,
+    logo: cfg.logo || `${assetBase}/logo.png`,
+    background: cfg.background || `${assetBase}/background.${ext}`,
     types: [...new Set(rows.map((r) => r.type))],
     resources: ['catalog'],
     catalogs: rows.map((r) => ({ type: r.type, id: r.catalogId, name: r.title, extra: [] })),
@@ -77,12 +96,15 @@ export function buildManifest({ cfg, base, preset = false, token = '', ext = 'pn
   };
 }
 
+// Cinemeta lists "small" posters; "medium" is noticeably sharper on a TV.
+const sharper = (url) => (url ? url.replace('images.metahub.space/poster/small/', 'images.metahub.space/poster/medium/') : url);
+
 export function toMetas({ row, items, cfg, artUrl }) {
   return items.slice(0, cfg.count).map((it) => {
     const shape = row.shape;
     let poster;
     if (cfg.posters[it.id]) poster = cfg.posters[it.id];
-    else if (cfg.art === 'original') poster = shape === 'landscape' ? it.background || it.poster : it.poster;
+    else if (cfg.art === 'original') poster = shape === 'landscape' ? it.background || sharper(it.poster) : sharper(it.poster);
     else poster = artUrl(it, shape);
     const m = { id: it.id, type: it.type || row.type, name: it.name, poster, posterShape: shape };
     if (it.background) m.background = it.background;

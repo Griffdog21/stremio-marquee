@@ -15,24 +15,32 @@ test('core version matches package.json', () => {
   assert.equal(VERSION, pkg.version);
 });
 
-test('every preset manifest passes the official Stremio linter', () => {
+test('every stock manifest and its real-poster twin pass the official Stremio linter', () => {
+  const ids = new Set();
   for (const t of THEMES) {
-    const manifest = buildManifest({ cfg: normalizeConfig({ theme: t.id }), base: `https://example.com/addon/${t.id}`, preset: true, ext: 'jpg' });
-    const result = linter.lintManifest(manifest);
-    assert.ok(result.valid, `${t.id}: ${JSON.stringify(result.errors)}`);
-    assert.deepEqual(result.warnings, [], `${t.id} warnings`);
-    assert.equal(manifest.id, `community.marquee.${t.id}`);
-    assert.ok(manifest.catalogs.every((c) => !c.extra.some((e) => e.isRequired)), 'every row can show on the home board');
+    for (const [variant, cfg] of [['stock', normalizeConfig({ theme: t.id })], ['classic', normalizeConfig({ theme: t.id, art: 'original' })]]) {
+      const manifest = buildManifest({ cfg, base: `https://example.com/addon/${t.id}`, variant, ext: 'jpg' });
+      const result = linter.lintManifest(manifest);
+      assert.ok(result.valid, `${t.id}/${variant}: ${JSON.stringify(result.errors)}`);
+      assert.deepEqual(result.warnings, [], `${t.id}/${variant} warnings`);
+      assert.ok(manifest.catalogs.every((c) => !c.extra.some((e) => e.isRequired)), 'every row can show on the home board');
+      ids.add(manifest.id);
+    }
   }
+  assert.equal(ids.size, THEMES.length * 2, 'every add-on id is unique, so all can be installed together');
+  assert.ok(ids.has('community.marquee.haunt') && ids.has('community.marquee.haunt.classic'));
 });
 
-test('custom manifests get a distinct id and pass the linter', () => {
-  const cfg = normalizeConfig({ theme: 'noir', rows: ['fresh', 'custom0'], custom: [{ name: 'Mine', ids: ['tt0083658'] }] });
+test('custom manifests get a distinct id, the chosen name, and pass the linter', () => {
+  const cfg = normalizeConfig({ title: 'Movie Night', theme: 'noir', rows: ['fresh', 'custom0'], custom: [{ name: 'Mine', ids: ['tt0083658'] }] });
   const token = encodeConfig(cfg);
-  const manifest = buildManifest({ cfg, base: `https://srv.example/${token}`, token });
-  assert.ok(linter.lintManifest(manifest).valid);
-  assert.match(manifest.id, /^community\.marquee\.noir\.[a-z0-9]+$/);
-  assert.deepEqual(manifest.catalogs.map((c) => c.id), ['mq-fresh', 'mq-custom0']);
+  const live = buildManifest({ cfg, base: `https://srv.example/${token}`, token, variant: 'live' });
+  assert.ok(linter.lintManifest(live).valid);
+  assert.match(live.id, /^community\.marquee\.noir\.[a-z0-9]+$/);
+  assert.equal(live.name, 'Movie Night');
+  assert.deepEqual(live.catalogs.map((c) => c.id), ['mq-fresh', 'mq-custom0']);
+  const published = buildManifest({ cfg, base: 'https://example.com/addon/movie-night', variant: 'preset', slug: 'movie-night' });
+  assert.equal(published.id, 'community.marquee.preset.movie-night');
 });
 
 test('rows carry theme names, emoji prefixes and shape overrides', () => {
@@ -42,7 +50,9 @@ test('rows carry theme names, emoji prefixes and shape overrides', () => {
   assert.equal(rows.find((r) => r.id === 'movies').title, '🎃 Now Playing');
   assert.equal(rows.find((r) => r.id === 'series').shape, 'square');
   const bare = resolveRows(normalizeConfig({ theme: 'haunt', prefix: '' }));
-  assert.equal(bare[1].title, 'Trending Movies');
+  // Stremio appends " - Movie" / " - Series" itself.
+  assert.equal(bare[1].title, 'Trending');
+  assert.ok(bare.every((r) => !/\b(movies?|series)\b/i.test(r.name)), 'row names never repeat the type');
 });
 
 test('metas: generated art, original posters and per-title swaps', () => {
@@ -60,6 +70,8 @@ test('metas: generated art, original posters and per-title swaps', () => {
   const original = toMetas({ row: { ...row, shape: 'landscape' }, items, cfg: normalizeConfig({ art: 'original' }), artUrl });
   assert.equal(original[0].poster, 'https://img/b.jpg', 'widescreen original cards use the backdrop');
   assert.equal(original[1].poster, 'https://img/p2.jpg', 'falls back to the poster without a backdrop');
+  const sharp = toMetas({ row, items: [{ ...items[0], poster: 'https://images.metahub.space/poster/small/tt0083658/img' }], cfg: normalizeConfig({ art: 'original' }), artUrl });
+  assert.equal(sharp[0].poster, 'https://images.metahub.space/poster/medium/tt0083658/img', 'real posters use the sharper size');
 });
 
 test('art tokens round-trip unicode titles', () => {

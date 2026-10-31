@@ -50,3 +50,16 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+
+  # GitHub pauses scheduled workflows after 60 days without repository
+  # activity, which would quietly freeze the trending rows. Re-enabling the
+  # workflow on each scheduled run keeps the daily refresh going.
+  keepalive:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/pages.yml/enable"
+        env:
+          GH_TOKEN: ${{ github.token }}

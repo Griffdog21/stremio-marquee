@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { normalizeConfig, encodeConfig, decodeConfig, DEFAULTS, LIMITS } from '../src/core/config.js';
+import { normalizeConfig, encodeConfig, exportConfig, decodeConfig, DEFAULTS, LIMITS } from '../src/core/config.js';
 
 test('defaults are sane', () => {
   const cfg = normalizeConfig({});
@@ -66,6 +66,29 @@ test('hostile or malformed input is cleaned up', () => {
   assert.deepEqual(cfg.custom[0].ids, ['tt0083658']);
   assert.equal(cfg.count, LIMITS.maxCount);
   assert.equal([...cfg.prefix].length, 4);
+});
+
+test('image URLs are normalised so they can never break out of HTML', () => {
+  const evil = 'https://x.example/"><img src=x onerror=alert(1)>';
+  const cfg = normalizeConfig({ logo: evil, posters: { tt0111161: evil } });
+  for (const url of [cfg.logo, cfg.posters.tt0111161]) {
+    assert.ok(url.startsWith('https://x.example/'));
+    assert.ok(!/["<>]/.test(url), `unsafe characters survived: ${url}`);
+  }
+});
+
+test('add-on names and emoji prefixes are kept tidy', () => {
+  const cfg = normalizeConfig({ title: `  ${'Movie Night '.repeat(10)}`, prefix: '👨‍👩‍👧‍👦🎃🎃🎃🎃' });
+  assert.ok(cfg.title.length <= LIMITS.name && !cfg.title.startsWith(' '));
+  assert.ok(cfg.prefix.startsWith('👨‍👩‍👧‍👦'), 'a family emoji is not split apart');
+  assert.equal(new Intl.Segmenter().segment(cfg.prefix)[Symbol.iterator]().next().value.segment, '👨‍👩‍👧‍👦');
+});
+
+test('exported configs are readable and round-trip', () => {
+  const input = { theme: 'aurora', title: 'Northern', rows: ['spotlight', 'series'] };
+  const out = exportConfig(input);
+  assert.deepEqual(Object.keys(out).sort(), ['rows', 'theme', 'title']);
+  assert.deepEqual(normalizeConfig(out), normalizeConfig(input));
 });
 
 test('garbage tokens decode to null instead of throwing', () => {

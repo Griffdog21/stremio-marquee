@@ -186,6 +186,11 @@ section.block { padding: clamp(56px, 9vw, 110px) 0; border-top: 1px solid var(--
 .card-body .btn-row { position: relative; z-index: 2; }
 .badge { position: absolute; top: 12px; left: 12px; z-index: 2; font: 700 0.68rem/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; padding: 6px 8px; border-radius: 6px; background: var(--c-accent); color: var(--c-bg); }
 
+/* --- Segmented switch -------------------------------------------------------- */
+.segmented { display: inline-flex; padding: 4px; gap: 4px; border-radius: 999px; background: color-mix(in srgb, var(--bg) 70%, #000); border: 1px solid var(--line); margin-top: 4px; }
+.segmented button { min-height: 38px; padding: 0 16px; border: 0; border-radius: 999px; background: transparent; color: var(--text); font: 700 0.88rem/1 var(--body); cursor: pointer; }
+.segmented button[aria-pressed='true'] { background: var(--primary); color: var(--on-primary); }
+
 /* --- Install panel --------------------------------------------------------- */
 .install { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.8fr); gap: 28px; align-items: start; padding: clamp(22px, 3.5vw, 40px); border-radius: 28px; background: var(--panel); border: 1px solid var(--line); }
 @media (max-width: 860px) { .install { grid-template-columns: 1fr; } }

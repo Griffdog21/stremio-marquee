@@ -1,6 +1,6 @@
 {
   "name": "stremio-marquee",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A theme engine for Stremio: generative themed poster art, spotlight rows, your own images, and matching desktop/web themes. Works on every Stremio app, Google TV included.",
   "type": "module",
   "license": "MIT",

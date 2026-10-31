@@ -39,6 +39,7 @@
             <label class="field">Password <input type="password" id="password" autocomplete="current-password" required></label>
             <div class="btn-row" style="grid-column:1/-1"><button class="btn" type="submit" id="login-btn">Connect</button></div>
           </form>
+          <p class="hint">Signed up with Google, Apple or Facebook? You don't have a Stremio password; use an auth key below.</p>
           <details style="margin-top:12px">
             <summary class="hint" style="cursor:pointer">Use an auth key instead</summary>
             <p class="hint">On web.stremio.com (signed in), open the browser console and run <code>JSON.parse(localStorage.getItem("profile")).auth.key</code>, then paste the result here.</p>
@@ -54,6 +55,7 @@
           <div class="panel" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between">
             <div class="btn-row">
               <button class="btn small" type="button" id="marquee-top">Marquee to the top</button>
+              <button class="btn small" type="button" id="hide-cinemeta">Hide Cinemeta's rows</button>
               <button class="btn small ghost" type="button" id="backup">Download backup</button>
               <label class="btn small ghost" style="cursor:pointer">Restore backup…<input type="file" id="restore" accept="application/json,.json" hidden></label>
             </div>
@@ -73,13 +75,13 @@
           <ul class="hint" style="padding-left:18px;display:grid;gap:8px;margin:0">
             <li>Everything runs in this browser tab. Your login goes only to Stremio's own API (<code>api.strem.io</code>) and is forgotten when you close the tab.</li>
             <li>Nothing changes until you press <b>Save to Stremio</b>, and every save downloads a backup of your add-on list first.</li>
-            <li>Hidden rows are removed from Stremio's saved copy of that add-on. If the add-on updates itself later, its rows may come back; just run Lineup again.</li>
+            <li>Hidden rows are changed in Stremio's saved copy of that add-on. If the add-on updates itself later, its rows may come back; just run Lineup again.</li>
             <li>“Continue Watching” always stays at the top. Stremio doesn't let add-ons move it.</li>
           </ul>
         </section>
         <section class="panel">
-          <h3>Careful with Cinemeta</h3>
-          <p class="hint" style="margin:0">Stremio's search for movies and series runs through Cinemeta's <b>Popular</b> rows. Hide those only if another add-on of yours also provides search.</p>
+          <h3>Search keeps working</h3>
+          <p class="hint" style="margin:0">Rows that power search, like Cinemeta's <b>Popular</b>, aren't deleted when you hide them. They're switched to search-only, the way Stremio's own YouTube add-on works, so they leave the home screen and Discover but still answer searches. Rows marked <span class="pill">still searchable</span> are hidden this way.</p>
         </section>
       </aside>
     </div>

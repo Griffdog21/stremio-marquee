@@ -27,7 +27,8 @@ test('default manifest with CORS', async () => {
   assert.equal(res.status, 200);
   assert.equal(res.headers.get('access-control-allow-origin'), '*');
   const m = JSON.parse(body);
-  assert.equal(m.id, 'community.marquee.neon');
+  // Distinct from the stock GitHub Pages add-on, so both can be installed.
+  assert.equal(m.id, 'community.marquee.neon.live');
   assert.ok(m.logo.startsWith(base));
 });
 

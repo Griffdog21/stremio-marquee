@@ -147,9 +147,9 @@ async function main() {
   for (const t of THEMES) {
     const coll = await mapLimit((COLLECTIONS[t.collection.id] || []).slice(0, 6), 6, (c) => meta('movie', c.id).catch(() => null));
     const rows = [
-      { name: t.collection.name, shape: 'landscape', items: coll.filter(Boolean) },
-      { name: 'Trending Movies', shape: 'poster', items: movies.slice(0, 8) },
-      { name: 'Trending Series', shape: 'poster', items: series.slice(0, 8) },
+      { name: t.collection.name, type: 'movie', shape: 'landscape', items: coll.filter(Boolean) },
+      { name: 'Trending', type: 'movie', shape: 'poster', items: movies.slice(0, 8) },
+      { name: 'Trending', type: 'series', shape: 'poster', items: series.slice(0, 8) },
     ];
     const board = renderBoard({ template: t.template, palette: t.palette, rows, title: t.name, idPrefix: t.id });
     writeFileSync(out(`themes/${t.id}.jpg`), await encode(svgToPng(board, { width: 960 })));

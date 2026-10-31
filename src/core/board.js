@@ -17,7 +17,7 @@ function card(art, x, y, w, h, radius, clipId, imageUrl) {
 }
 
 /**
- * rows: [{ name, shape: 'poster'|'landscape'|'square', items: [...], imageFor?(item) }]
+ * rows: [{ name, type?, shape: 'poster'|'landscape'|'square', items: [...], imageFor?(item) }]
  * The layout mimics a 1080p TV: a nav rail, a search pill and scrolling rows.
  */
 export function renderBoard({ template, palette, rows, width = 1280, height = 720, title = 'Marquee', idPrefix = 'b' }) {
@@ -57,7 +57,9 @@ export function renderBoard({ template, palette, rows, width = 1280, height = 72
     const ch = (wide ? 170 : square ? 190 : 236) * sc;
     const cw = wide ? ch / 0.5625 : square ? ch : ch / 1.5;
     const gap = 18 * sc;
-    s += `<text x="${n(sx)}" y="${n(y + 20 * sc)}" font-family="${uiFamily}" font-weight="${ui.weight}" font-size="${n(21 * sc)}" fill="${p.text}">${esc(row.name)}</text>`;
+    // Stremio appends the type to every row title ("Trending - Movie").
+    const suffix = row.type ? `<tspan fill="${p.muted}"> - ${row.type === 'series' ? 'Series' : 'Movie'}</tspan>` : '';
+    s += `<text x="${n(sx)}" y="${n(y + 20 * sc)}" font-family="${uiFamily}" font-weight="${ui.weight}" font-size="${n(21 * sc)}" fill="${p.text}">${esc(row.name)}${suffix}</text>`;
     const label = 'SEE ALL';
     s += `<text x="${n(width - 40 * sc)}" y="${n(y + 20 * sc)}" font-family="${uiFamily}" font-weight="${ui.weight}" font-size="${n(13 * sc)}" text-anchor="end" letter-spacing="${n(1.5 * sc)}" fill="${p.primary}">${label}</text>`;
     y += 34 * sc;

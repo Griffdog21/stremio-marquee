@@ -9,6 +9,7 @@ export const CARD_SHAPES = ['poster', 'landscape', 'square'];
 export const LIMITS = { rows: 12, custom: 6, customIds: 60, posters: 60, name: 40, url: 600, minCount: 10, maxCount: 100 };
 
 export const DEFAULTS = Object.freeze({
+  title: '', // add-on name shown in Stremio ('' = "Marquee · <theme>")
   theme: 'neon',
   template: null, // null = the theme's own art style
   colors: {}, // palette overrides, e.g. { primary: '#ff00aa' }
@@ -26,15 +27,26 @@ export const DEFAULTS = Object.freeze({
 
 const clampStr = (v, max) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
 
-export function isHttpUrl(v) {
-  if (typeof v !== 'string' || v.length > LIMITS.url) return false;
+// Cut on whole user-perceived characters so emoji sequences never split.
+const graphemes = (s) =>
+  typeof Intl !== 'undefined' && Intl.Segmenter ? [...new Intl.Segmenter().segment(s)].map((g) => g.segment) : [...s];
+
+/**
+ * The normalised form of an http(s) URL, or '' if it isn't one. Normalising
+ * percent-encodes quotes and angle brackets, so a URL can never break out of
+ * an HTML attribute downstream.
+ */
+export function cleanUrl(v) {
+  if (typeof v !== 'string' || v.length > LIMITS.url) return '';
   try {
-    const u = new URL(v);
-    return u.protocol === 'https:' || u.protocol === 'http:';
+    const u = new URL(v.trim());
+    return u.protocol === 'https:' || u.protocol === 'http:' ? u.href : '';
   } catch {
-    return false;
+    return '';
   }
 }
+
+export const isHttpUrl = (v) => cleanUrl(v) !== '';
 
 const isImdb = (v) => typeof v === 'string' && /^tt\d{5,10}$/.test(v);
 const rowKey = (id) => BUILTIN_ROWS.includes(id) || /^custom\d$/.test(id);
@@ -42,6 +54,7 @@ const rowKey = (id) => BUILTIN_ROWS.includes(id) || /^custom\d$/.test(id);
 export function normalizeConfig(input = {}) {
   const src = input && typeof input === 'object' ? input : {};
   const cfg = {};
+  cfg.title = clampStr(src.title, LIMITS.name);
   cfg.theme = THEME_IDS.includes(src.theme) ? src.theme : DEFAULTS.theme;
   cfg.template = TEMPLATE_IDS.includes(src.template) ? src.template : null;
 
@@ -74,26 +87,32 @@ export function normalizeConfig(input = {}) {
     const name = clampStr(v, LIMITS.name);
     if (rowKey(k) && name) cfg.names[k] = name;
   }
-  cfg.prefix = typeof src.prefix === 'string' ? [...src.prefix.trim()].slice(0, 4).join('') : null;
-  cfg.logo = isHttpUrl(src.logo) ? src.logo : '';
-  cfg.background = isHttpUrl(src.background) ? src.background : '';
+  cfg.prefix = typeof src.prefix === 'string' ? graphemes(src.prefix.trim()).slice(0, 4).join('') : null;
+  cfg.logo = cleanUrl(src.logo);
+  cfg.background = cleanUrl(src.background);
   cfg.posters = {};
   for (const [k, v] of Object.entries(src.posters || {}).slice(0, LIMITS.posters)) {
-    if (isImdb(k) && isHttpUrl(v)) cfg.posters[k] = v;
+    const url = cleanUrl(v);
+    if (isImdb(k) && url) cfg.posters[k] = url;
   }
   const count = parseInt(src.count, 10);
   cfg.count = Number.isFinite(count) ? Math.min(LIMITS.maxCount, Math.max(LIMITS.minCount, count)) : DEFAULTS.count;
   return cfg;
 }
 
-// Only store what differs from the defaults, so install URLs stay short.
-export function encodeConfig(input) {
+// Only what differs from the defaults: keeps install URLs short and preset
+// files (presets/*.json) readable.
+export function exportConfig(input) {
   const cfg = normalizeConfig(input);
   const out = {};
   for (const [k, v] of Object.entries(cfg)) {
     if (k === 'theme' || JSON.stringify(v) !== JSON.stringify(DEFAULTS[k])) out[k] = v;
   }
-  return toBase64Url(JSON.stringify(out));
+  return out;
+}
+
+export function encodeConfig(input) {
+  return toBase64Url(JSON.stringify(exportConfig(input)));
 }
 
 export function decodeConfig(token) {

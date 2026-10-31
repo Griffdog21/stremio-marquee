@@ -31,12 +31,13 @@
 Stremio add-ons can't repaint the app itself, but they **can** fill your home screen with rows, posters, images and text. Marquee turns that into a theme engine:
 
 - 🎨 **Generated poster art** in eight distinct styles, rendered as plain JPEGs so every Stremio app shows them, from Google TV and Android TV to iOS, desktop and web.
-- 🖼️ **Widescreen spotlight rows**: a cinematic, Netflix-style hero row of 16:9 cards built from each theme's hand-picked collection.
+- 🖼️ **Or real posters**: every theme also comes as a real-poster edition with the same rows, collection and spotlight but the official artwork (sharper than Stremio's default size).
+- 🎬 **Widescreen spotlight rows**: a cinematic, Netflix-style hero row of 16:9 cards built from each theme's hand-picked collection.
 - 🎞️ **Curated collections** per theme (*Neon Nights*, *Shadows & Smoke*, *Midnight Monsters*…) plus a genre **mood row**.
-- 🧑‍🎨 **The Studio**: mix any palette with any art style, rename and reshape rows, swap in your **own poster images**, set your own add-on logo and backdrop, build rows from your favourite titles, and watch it all live on a virtual TV.
+- 🧑‍🎨 **The Studio**: mix any palette with any art style, rename and reshape rows, name your add-on, swap in your **own poster images**, set your own logo and backdrop, build rows from your favourite titles, and watch it all live on a virtual TV. Then **publish it free** to GitHub Pages, no server required.
+- 📺 **Lineup**: put Marquee at the top of your home screen and hide Cinemeta's duplicate rows in one click. Search keeps working.
 - 🖥️ **Full UI themes** for the apps that accept CSS: [Stremio Enhanced](https://github.com/REVENGE977/stremio-enhanced) on desktop and [Stylus](https://add0n.com/stylus.html) on web.stremio.com, each with a signature effect (noir turns posters black & white until you hover).
-- 📺 **Lineup**: reorder your home screen so the theme leads, even on your TV.
-- 💸 **Free forever**: the stock themes are static files on GitHub Pages, rebuilt daily by GitHub Actions. Nothing to host.
+- 💸 **Free forever**: everything is static files on GitHub Pages, rebuilt daily by GitHub Actions. Nothing to host.
 
 ## 🎬 Now showing
 
@@ -63,23 +64,25 @@ Stremio add-ons can't repaint the app itself, but they **can** fill your home sc
 
 Add-ons live in your **Stremio account**, so you install once, on any device, and they sync everywhere you're signed in.
 
-1. On your **phone or computer**, open **[griffdog21.github.io/stremio-marquee](https://griffdog21.github.io/stremio-marquee/)**, pick a theme and tap **Install in Stremio** (or **Install via Stremio Web** if you don't have the app on that device). You can also scan the QR code from the site with your phone.
+1. On your **phone or computer**, open **[griffdog21.github.io/stremio-marquee](https://griffdog21.github.io/stremio-marquee/)**, pick a theme, choose **Generated art** or **Real posters**, and tap **Install in Stremio** (or **Install via Stremio Web** if you don't have the app on that device). You can also scan the QR code from the site with your phone.
 2. Open Stremio on your **Google TV**, signed in to the same account. Marquee's rows appear on the home screen; restart the app if it was already open.
-3. *(Optional)* Open **[Lineup](https://griffdog21.github.io/stremio-marquee/lineup.html)** to move Marquee's rows to the top and hide the ones you don't want.
+3. **Make it your home screen:** new add-ons land below Stremio's built-in rows. Open **[Lineup](https://griffdog21.github.io/stremio-marquee/lineup.html)** → **Marquee to the top** → **Hide Cinemeta's rows** (search keeps working) → **Save**.
 
 <details>
 <summary><b>Manifest URLs</b> (paste into Stremio → Add-ons → search box)</summary>
 
-| Theme | Manifest |
-| --- | --- |
-| 🌆 Midnight Neon | `https://griffdog21.github.io/stremio-marquee/addon/neon/manifest.json` |
-| 🎞️ Film Noir | `https://griffdog21.github.io/stremio-marquee/addon/noir/manifest.json` |
-| ✨ Gilded Age | `https://griffdog21.github.io/stremio-marquee/addon/deco/manifest.json` |
-| 📼 Rewind VHS | `https://griffdog21.github.io/stremio-marquee/addon/vhs/manifest.json` |
-| 🔴 Bauhaus | `https://griffdog21.github.io/stremio-marquee/addon/bauhaus/manifest.json` |
-| 💾 Phosphor | `https://griffdog21.github.io/stremio-marquee/addon/terminal/manifest.json` |
-| 🎃 Hallowed | `https://griffdog21.github.io/stremio-marquee/addon/haunt/manifest.json` |
-| 🌌 Aurora | `https://griffdog21.github.io/stremio-marquee/addon/aurora/manifest.json` |
+Every theme lives at `https://griffdog21.github.io/stremio-marquee/addon/<id>/manifest.json`, and its real-poster edition at `…/addon/<id>-classic/manifest.json`.
+
+| Theme | `<id>` | Generated art | Real posters |
+| --- | --- | --- | --- |
+| 🌆 Midnight Neon | `neon` | [manifest](https://griffdog21.github.io/stremio-marquee/addon/neon/manifest.json) | [manifest](https://griffdog21.github.io/stremio-marquee/addon/neon-classic/manifest.json) |
+| 🎞️ Film Noir | `noir` | [manifest](https://griffdog21.github.io/stremio-marquee/addon/noir/manifest.json) | [manifest](https://griffdog21.github.io/stremio-marquee/addon/noir-classic/manifest.json) |
+| ✨ Gilded Age | `deco` | [manifest](https://griffdog21.github.io/stremio-marquee/addon/deco/manifest.json) | [manifest](https://griffdog21.github.io/stremio-marquee/addon/deco-classic/manifest.json) |
+| 📼 Rewind VHS | `vhs` | [manifest](https://griffdog21.github.io/stremio-marquee/addon/vhs/manifest.json) | [manifest](https://griffdog21.github.io/stremio-marquee/addon/vhs-classic/manifest.json) |
+| 🔴 Bauhaus | `bauhaus` | [manifest](https://griffdog21.github.io/stremio-marquee/addon/bauhaus/manifest.json) | [manifest](https://griffdog21.github.io/stremio-marquee/addon/bauhaus-classic/manifest.json) |
+| 💾 Phosphor | `terminal` | [manifest](https://griffdog21.github.io/stremio-marquee/addon/terminal/manifest.json) | [manifest](https://griffdog21.github.io/stremio-marquee/addon/terminal-classic/manifest.json) |
+| 🎃 Hallowed | `haunt` | [manifest](https://griffdog21.github.io/stremio-marquee/addon/haunt/manifest.json) | [manifest](https://griffdog21.github.io/stremio-marquee/addon/haunt-classic/manifest.json) |
+| 🌌 Aurora | `aurora` | [manifest](https://griffdog21.github.io/stremio-marquee/addon/aurora/manifest.json) | [manifest](https://griffdog21.github.io/stremio-marquee/addon/aurora-classic/manifest.json) |
 
 </details>
 
@@ -92,6 +95,7 @@ Add-ons live in your **Stremio account**, so you install once, on any device, an
 | Curated collections + mood rows | ✅ | ✅ | ✅ | ✅ |
 | Your own posters, logo & backdrop (Studio) | ✅ | ✅ | ✅ | ✅ |
 | Row order / hidden rows (Lineup) | ✅ | ✅ | ✅ | ✅ |
+| Real-poster editions | ✅ | ✅ | ✅ | ✅ |
 | App colours, fonts, focus glow | — | — | ✅ via Stremio Enhanced | ✅ via Stylus |
 
 > **Why no app colours on TV?** Stremio add-ons speak a data protocol (catalogs, metadata, streams, subtitles); there's no way for an add-on to inject styles into the app. Marquee themes everything an add-on *can* reach, and ships real CSS themes where Stremio accepts them.
@@ -103,11 +107,10 @@ Add-ons live in your **Stremio account**, so you install once, on any device, an
 - **Theme & art style**: start from any theme, then mix in another theme's art (Bauhaus geometry in neon colours, a VHS sleeve in noir greys…) or switch to original posters.
 - **Colours**: seven-colour palette with live preview.
 - **Rows**: show/hide, rename, reorder, and pick a card shape per row: poster, widescreen or square.
-- **Your images**: replace any title's poster with your own image URL; set the add-on's logo and backdrop.
+- **Name & images**: name your add-on, replace any title's poster with your own image, set the add-on's logo and backdrop.
 - **Your collections**: search Cinemeta or paste IMDb links to build up to six rows of your own.
+- **Publish**: one click opens GitHub with your design pre-filled as `presets/<name>.json`. Commit it and your add-on is live on GitHub Pages two minutes later, refreshed daily, free ([details below](#-custom-setups)).
 - **Export**: download the same palette as a Stremio Enhanced or Stylus theme, or share a link to your design.
-
-The eight stock themes are static and free. Fully custom setups are rendered live, so they need a Marquee server ([one click, below](#self-hosting)).
 
 ## 🖥️ Desktop & web themes
 
@@ -121,15 +124,24 @@ Each theme also ships as a full UI theme that restyles Stremio's own colours, ba
 
 ## 📋 Lineup (beta)
 
-Stremio orders home rows by add-on. **[Lineup](https://griffdog21.github.io/stremio-marquee/lineup.html)** reorders your add-ons and hides individual rows, straight from your browser:
+Stremio orders home rows by add-on, so a new add-on's rows start at the bottom, and Marquee's *Trending* rows mirror Cinemeta's *Popular* ones. **[Lineup](https://griffdog21.github.io/stremio-marquee/lineup.html)** fixes both from your browser:
 
-- Talks only to Stremio's own API (`api.strem.io`); nothing is stored or sent anywhere else.
-- Downloads a backup before every save, and can restore it.
-- Never uninstalls anything. Warns before you hide Cinemeta's *Popular* rows (they power search).
+- **Marquee to the top** and **Hide Cinemeta's rows** in one click each, plus per-row toggles for every add-on.
+- Hidden rows that power search are switched to *search-only*, the same pattern Stremio's own YouTube add-on uses, so search keeps working (verified in Stremio Web).
+- Talks only to Stremio's own API (`api.strem.io`); nothing is stored or sent anywhere else. Google/Apple/Facebook sign-ins can use an auth key instead of a password.
+- Downloads a backup before every save, can restore it, and never uninstalls anything.
 
-## 🚀 Self-hosting
+## 🚀 Custom setups
 
-Needed only for **custom Studio setups**. One click:
+### Free: publish to GitHub Pages
+
+Every `presets/<name>.json` file in the repository becomes its own add-on at `…/addon/<name>/manifest.json`, built and refreshed daily alongside the stock themes. The Studio's **Publish with GitHub** button opens a pre-filled new file; commit it and the add-on is live about two minutes later. See [`presets/README.md`](presets/README.md) for the format.
+
+Using someone else's Marquee site? Fork this repository, enable **Actions**, set **Settings → Pages → Source** to **GitHub Actions**, and publish to your fork.
+
+### Live server (optional)
+
+A server renders any Studio setup straight from its install link, so changes apply instantly with no commit. One click:
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FGriffdog21%2Fstremio-marquee&project-name=marquee)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Griffdog21/stremio-marquee)
@@ -153,10 +165,11 @@ flowchart LR
   subgraph build["GitHub Actions · daily"]
     C[(Cinemeta<br/>trending + metadata)] --> E[Marquee art engine<br/>SVG → resvg → JPEG]
   end
-  E --> P["GitHub Pages<br/>8 add-ons · 1,000+ posters<br/>website · CSS themes"]
+  E --> P["GitHub Pages<br/>16 add-ons + your presets · 1,000+ posters<br/>website · CSS themes"]
   P -->|manifest + catalogs| S["Stremio on every device<br/>Google TV · Android · iOS · desktop · web"]
-  U["Studio (browser)<br/>same engine, live preview"] -->|config in the install URL| V["Your Marquee server<br/>renders art on demand"]
-  V --> S
+  U["Studio (browser)<br/>same engine, live preview"] -->|Publish: presets/name.json| build
+  U -.->|or config in the install URL| V["Optional live server<br/>renders art on demand"]
+  V -.-> S
 ```
 
 - **One engine everywhere.** `src/core` is plain ES modules: themes, the eight art templates, text fitting, manifests and catalogs. The same code runs in the GitHub Actions build, the Node server, and your browser (the Studio's live preview).
@@ -168,7 +181,7 @@ flowchart LR
 
 ```bash
 npm ci
-npm test                      # 21 tests: linting manifests, rendering every template, server routes
+npm test                      # linting manifests, rendering every template, Lineup rules, server routes
 npm run contact-sheet         # render every template against tricky titles → .cache/contact/
 npm run build                 # full static build → dist/ (MARQUEE_THEMES=haunt for one theme)
 npm run serve                 # preview dist/ like GitHub Pages
@@ -177,8 +190,9 @@ npm start                     # live addon server on :7000
 
 | Path | What lives there |
 | --- | --- |
-| `src/core/` | Themes, art templates (`art/*.js`), text layout, config, manifest & catalog builders, CSS theme generator |
-| `src/node/` | Cinemeta client, SVG → PNG/JPEG rendering |
+| `src/core/` | Themes, art templates (`art/*.js`), text layout, config, manifest & catalog builders, Lineup rules, CSS theme generator |
+| `src/node/` | Cinemeta client, preset loader, SVG → PNG/JPEG rendering |
+| `presets/` | Custom add-ons published from the Studio |
 | `src/server/` | The live addon (Node `http`, Vercel and Docker entry points) |
 | `site/` | The website: landing page, Studio, Lineup |
 | `scripts/` | Static build, font metrics, collection resolver, README artwork |

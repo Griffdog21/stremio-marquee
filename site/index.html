@@ -75,8 +75,13 @@
             <ol class="steps">
               <li><b>On your phone or computer</b>, tap <b>Install in Stremio</b>. No app on this device? Use <b>Stremio Web</b> instead.</li>
               <li><b>Sign in to the same Stremio account</b> on your Google TV. The add-on syncs over automatically; restart Stremio on the TV if it was already open.</li>
-              <li><b>Want Marquee's rows at the top?</b> Use <a href="lineup.html">Lineup</a> to reorder your home screen.</li>
+              <li><b>Make it your home screen:</b> new add-ons land below Stremio's own rows. <a href="lineup.html">Lineup</a> moves Marquee to the top and hides the duplicate Cinemeta rows in one click.</li>
             </ol>
+            <div class="segmented" role="group" aria-label="Poster style">
+              <button type="button" id="posters-art" aria-pressed="true">Generated art</button>
+              <button type="button" id="posters-real" aria-pressed="false">Real posters</button>
+            </div>
+            <p class="hint" id="posters-hint">Every poster drawn in the theme's style.</p>
             <div class="btn-row">
               <a class="btn" id="install-app" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Install in Stremio</a>
               <a class="btn ghost" id="install-web" href="#" target="_blank" rel="noopener">Install via Stremio Web</a>
@@ -85,12 +90,26 @@
               <code id="install-url">…</code>
               <button class="btn small ghost" id="copy-url" type="button">Copy</button>
             </div>
+            <p class="hint" id="freshness"></p>
           </div>
           <figure class="qr-card" style="margin:0">
             <div id="qr" aria-hidden="true"></div>
             <small>Scan with your phone to install from there. Your TV picks it up from your account.</small>
           </figure>
         </div>
+      </div>
+    </section>
+
+    <section class="block" id="mine" hidden>
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <span class="kicker">Published from the Studio</span>
+            <h2>Custom add-ons</h2>
+          </div>
+          <p>Built from the <code>presets/</code> folder of this site's repository and refreshed daily, just like the stock themes.</p>
+        </div>
+        <div class="gallery" id="mine-list"></div>
       </div>
     </section>
 
@@ -199,7 +218,12 @@
         <div class="faq">
           <details><summary>Why can't an add-on recolor the Stremio app itself?</summary><p>Stremio add-ons speak a data protocol: they return catalogs, metadata, streams and subtitles. They can't inject styles into the app. So on TVs and phones Marquee themes what add-ons control (the posters, rows and images on your home screen), and on desktop and web it adds full CSS themes.</p></details>
           <details><summary>Does Marquee stream anything?</summary><p>No. Marquee only provides themed catalog rows. Titles keep their real IMDb IDs, so your existing stream add-ons, watch history and library all work exactly as before.</p></details>
-          <details><summary>Do I need to run a server?</summary><p>Not for the eight ready-made themes. They're static files on GitHub Pages, rebuilt daily so trending rows stay fresh. Fully custom setups from the Studio need a free server, which you can deploy in one click.</p></details>
+          <details><summary>I see the same movies twice on my home screen.</summary><p>Marquee's Trending rows follow the same popularity list as Cinemeta's built-in Popular rows. Open <a href="lineup.html">Lineup</a> and press <b>Hide Cinemeta's rows</b>: they leave the home screen, and search keeps working.</p></details>
+          <details><summary>Marquee's rows are at the bottom of my TV's home screen.</summary><p>Stremio lists rows in the order add-ons were installed. <a href="lineup.html">Lineup</a> → <b>Marquee to the top</b> fixes it on every device at once (only Continue Watching stays above).</p></details>
+          <details><summary>Generated art or real posters?</summary><p>Your choice: every theme comes in both. Real-poster versions keep the theme's curated collection, mood row, widescreen spotlight and row styling, but show the official artwork. Pick with the switch in the Install panel.</p></details>
+          <details><summary>Can I install more than one theme?</summary><p>Yes. Each theme is a separate add-on with its own rows, so you can mix them, say Hallowed in October next to Aurora all year. Use Lineup to put them in order.</p></details>
+          <details><summary>How do I uninstall it?</summary><p>In Stremio on any device: Add-ons → Installed → Marquee → Uninstall. It's removed from your account, so it disappears from your TV too.</p></details>
+          <details><summary>Do I need to run a server?</summary><p>No. The stock themes are static files on GitHub Pages, rebuilt daily so trending rows stay fresh. Your own Studio designs can be published the same way: <b>Publish with GitHub</b> adds a file to the repository and the daily build hosts it for free. A live server is optional, for changes that apply instantly.</p></details>
           <details><summary>Where does the data come from?</summary><p>From Cinemeta, the same open catalog Stremio uses for its own home screen. The art is generated from each title's name, year, genres and rating, so no studio artwork is copied.</p></details>
           <details><summary>Will it slow down my TV?</summary><p>Posters are small, cached JPEGs (about 30&nbsp;KB each), comparable to Stremio's own.</p></details>
         </div>

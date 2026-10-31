@@ -96,7 +96,7 @@ export function createHandler({ publicUrl } = {}) {
       const [resource] = parts;
 
       if (resource === 'manifest.json') {
-        return sendJson(res, buildManifest({ cfg, base, token, preset: !token, ext: IMAGE_EXT }), 300);
+        return sendJson(res, buildManifest({ cfg, base, token, variant: 'live', ext: IMAGE_EXT }), 300);
       }
       if (resource === 'configure') {
         return send(res, 302, '', { location: `${origin}/studio.html${token ? `#cfg=${token}` : ''}` });

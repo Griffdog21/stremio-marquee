@@ -1,9 +1,9 @@
 // Lineup: reorder the add-ons in a Stremio account (which orders the home
 // screen rows) and hide individual rows. Talks only to api.strem.io.
 import { applyTheme, download, h, seasonalTheme, store, toast } from './common.js';
+import { CINEMETA, boardRows, setRow } from '../core/lineup.js';
 
 const API = 'https://api.strem.io/api';
-const CINEMETA = 'com.linvo.cinemeta';
 const $ = (id) => document.getElementById(id);
 
 applyTheme(store.get('theme', seasonalTheme()));
@@ -23,8 +23,6 @@ async function api(method, body) {
   return data.result;
 }
 
-const sameCatalog = (a, b) => a.type === b.type && a.id === b.id && (a.name || '') === (b.name || '');
-const onBoard = (c) => !(c.extraRequired || []).length && !(c.extra || []).some((e) => e.isRequired);
 const isMarquee = (a) => String(a.manifest?.id || '').startsWith('community.marquee');
 const clone = (x) => JSON.parse(JSON.stringify(x));
 
@@ -131,20 +129,9 @@ function move(from, to) {
   render();
 }
 
-function setCatalog(addon, catalog, on) {
-  const ref = reference.get(addon.transportUrl) || addon.manifest.catalogs || [];
-  const now = [...(addon.manifest.catalogs || [])];
-  const at = now.findIndex((c) => sameCatalog(c, catalog));
-  if (!on && at !== -1) now.splice(at, 1);
-  if (on && at === -1) {
-    const refIdx = ref.findIndex((c) => sameCatalog(c, catalog));
-    let insert = now.length;
-    for (let i = 0; i < now.length; i++) {
-      if (ref.findIndex((c) => sameCatalog(c, now[i])) > refIdx) { insert = i; break; }
-    }
-    now.splice(insert, 0, clone(catalog));
-  }
-  addon.manifest = { ...addon.manifest, catalogs: now };
+function setCatalog(addon, catalog, show) {
+  const ref = reference.get(addon.transportUrl) || [];
+  addon.manifest = { ...addon.manifest, catalogs: setRow(addon.manifest.catalogs || [], ref, catalog, show) };
   touched.add(addon.transportUrl);
   render();
 }
@@ -154,14 +141,25 @@ $('marquee-top').addEventListener('click', () => {
   if (!ours.length) return toast('No Marquee add-on installed yet');
   addons = [...ours, ...addons.filter((a) => !isMarquee(a))];
   render();
+  toast('Marquee moved to the top. Save to apply');
+});
+
+// Marquee's Trending rows mirror Cinemeta's Popular ones, so most people want
+// Cinemeta's off the home screen. Search keeps working (see core/lineup.js).
+$('hide-cinemeta').addEventListener('click', () => {
+  const cinemeta = addons.find((a) => a.manifest?.id === CINEMETA);
+  if (!cinemeta) return toast('Cinemeta isn\'t in this account');
+  for (const { catalog, shown } of boardRows(cinemeta.manifest.catalogs || [], reference.get(cinemeta.transportUrl) || [])) {
+    if (shown) setCatalog(cinemeta, catalog, false);
+  }
+  toast('Cinemeta\'s rows hidden; search still works. Save to apply');
 });
 
 function render() {
   $('addons').replaceChildren(...addons.map((a, i) => {
     const m = a.manifest || {};
-    const ref = (reference.get(a.transportUrl) || m.catalogs || []).filter(onBoard);
-    const shown = (m.catalogs || []).filter(onBoard);
-    const rows = ref.length ? ref : shown;
+    const rows = boardRows(m.catalogs || [], reference.get(a.transportUrl) || []);
+    const shownCount = rows.filter((r) => r.shown).length;
     return h('article', { class: `addon${isMarquee(a) ? ' marquee' : ''}` },
       h('div', { class: 'addon-head' },
         h('span', { class: 'pos' }, String(i + 1)),
@@ -170,22 +168,16 @@ function render() {
           h('b', {}, m.name || a.transportName || 'Add-on',
             a.flags?.official ? h('span', { class: 'pill' }, 'official') : null,
             a.flags?.protected ? h('span', { class: 'pill' }, 'protected') : null),
-          h('small', {}, rows.length ? `${shown.length} of ${rows.length} home rows shown` : 'No home rows (streams, subtitles or search only)')),
+          h('small', {}, rows.length ? `${shownCount} of ${rows.length} home rows shown` : 'No home rows (streams, subtitles or search only)')),
         h('div', { class: 'move' },
           h('button', { class: 'icon-btn', type: 'button', 'aria-label': `Move ${m.name} to the top`, disabled: i === 0, onclick: () => move(i, 0) }, '⤒'),
           h('button', { class: 'icon-btn', type: 'button', 'aria-label': `Move ${m.name} up`, disabled: i === 0, onclick: () => move(i, i - 1) }, '↑'),
           h('button', { class: 'icon-btn', type: 'button', 'aria-label': `Move ${m.name} down`, disabled: i === addons.length - 1, onclick: () => move(i, i + 1) }, '↓'))),
-      rows.length ? h('div', { class: 'addon-catalogs' }, ...rows.map((c) => {
-        const on = shown.some((s) => sameCatalog(s, c));
-        const box = h('input', { type: 'checkbox', checked: on });
-        box.addEventListener('change', () => {
-          if (!box.checked && m.id === CINEMETA && c.id === 'top') {
-            const ok = window.confirm('Hiding Cinemeta\'s Popular row also turns off Stremio\'s search for that type, unless another add-on provides search. Hide it anyway?');
-            if (!ok) { box.checked = true; return; }
-          }
-          setCatalog(a, c, box.checked);
-        });
-        return h('label', { class: 'catalog-toggle' }, box, h('span', { class: 'type' }, c.type), c.name || c.id);
+      rows.length ? h('div', { class: 'addon-catalogs' }, ...rows.map(({ catalog: c, shown, keepsSearch }) => {
+        const box = h('input', { type: 'checkbox', checked: shown });
+        box.addEventListener('change', () => setCatalog(a, c, box.checked));
+        return h('label', { class: 'catalog-toggle' }, box, h('span', { class: 'type' }, c.type), c.name || c.id,
+          !shown && keepsSearch ? h('span', { class: 'pill' }, 'still searchable') : null);
       })) : null);
   }));
   dirty();

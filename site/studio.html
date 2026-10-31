@@ -81,7 +81,10 @@
         </section>
 
         <section class="panel">
-          <h3>Your images</h3>
+          <h3>Name &amp; images</h3>
+          <label class="field" style="margin-bottom:12px">Add-on name in Stremio
+            <input type="text" id="title" maxlength="40" autocomplete="off">
+          </label>
           <div class="grid-2">
             <label class="field">Add-on logo URL
               <input type="url" id="logo" placeholder="https://…/logo.png" autocomplete="off">
@@ -108,7 +111,37 @@
 
         <section class="panel" id="install-panel">
           <h3>Install</h3>
-          <div id="install-body"></div>
+          <div id="install-stock"></div>
+          <div id="install-custom" hidden>
+            <h4 class="sub" style="margin-top:0">Publish free with GitHub</h4>
+            <p class="hint" style="margin-top:0">Saves your design as <code>presets/&lt;address&gt;.json</code> in your Marquee repository. GitHub builds and hosts it like the stock themes, refreshed daily. It's live about two minutes after you commit.</p>
+            <div class="grid-2">
+              <label class="field">Repository
+                <input type="text" id="pub-repo" placeholder="you/stremio-marquee" autocomplete="off" spellcheck="false">
+              </label>
+              <label class="field">Add-on address
+                <input type="text" id="pub-slug" maxlength="40" autocomplete="off" spellcheck="false">
+              </label>
+            </div>
+            <div id="pub-result"></div>
+            <details class="more">
+              <summary>Using someone else's Marquee site?</summary>
+              <p class="hint">Fork <a href="https://github.com/Griffdog21/stremio-marquee" target="_blank" rel="noopener">the repository</a>. In your fork, open <b>Actions</b> and enable workflows, then set <b>Settings → Pages → Source</b> to <b>GitHub Actions</b>. Enter your fork above, e.g. <code>you/stremio-marquee</code>.</p>
+            </details>
+            <details class="more" id="server-details">
+              <summary>Prefer a live server? Changes apply instantly</summary>
+              <p class="hint">A Marquee server renders your setup on demand, straight from its install link, with no commit needed.</p>
+              <div class="deploy">
+                <a class="btn small" id="deploy-vercel" target="_blank" rel="noopener">▲ Deploy to Vercel</a>
+                <a class="btn small ghost" id="deploy-render" target="_blank" rel="noopener">Deploy to Render</a>
+                <a class="btn small ghost" id="deploy-other" target="_blank" rel="noopener">Docker / other</a>
+              </div>
+              <label class="field" style="margin-top:12px">Your Marquee server
+                <input type="url" id="server-url" placeholder="https://your-marquee.example.com" autocomplete="off">
+              </label>
+              <div id="server-result"></div>
+            </details>
+          </div>
         </section>
 
         <section class="panel">

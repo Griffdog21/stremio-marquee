@@ -1,7 +1,7 @@
 // The Marquee Studio: edit a configuration and watch it on a virtual TV. The
 // preview is drawn by the very same art engine the addon uses (src/core).
 import { THEMES, getTheme, PALETTE_KEYS } from '../core/themes.js';
-import { normalizeConfig, encodeConfig, decodeConfig, BUILTIN_ROWS, CARD_SHAPES } from '../core/config.js';
+import { normalizeConfig, encodeConfig, exportConfig, decodeConfig, BUILTIN_ROWS, CARD_SHAPES } from '../core/config.js';
 import { resolveRows, rowDefs } from '../core/addon.js';
 import { renderBoard } from '../core/board.js';
 import { renderArt } from '../core/art/index.js';
@@ -33,6 +33,8 @@ async function liveSample() {
 }
 const sample = (await fetch('data/sample.json').then((r) => (r.ok ? r.json() : null)).catch(() => null)) || (await liveSample());
 const collections = await fetch('data/collections.json').then((r) => r.json()).catch(() => ({}));
+// Addresses already published from presets/, so "Publish" becomes "Update".
+const publishedSlugs = new Set(((await fetch('addons.json').then((r) => (r.ok ? r.json() : null)).catch(() => null))?.custom || []).map((a) => a.slug));
 const metaCache = new Map();
 
 // Look a title up by IMDb id (trying the other type too: pasted ids can be either).
@@ -137,30 +139,30 @@ function render() {
 
   const rows = resolveRows(cfg).map((row) => ({
     name: row.title,
+    type: row.type,
     shape: row.shape,
     items: itemsFor(row, cfg).slice(0, 8),
     imageFor: (item) => imageFor(cfg, row, item),
   })).filter((r) => r.items.length);
   $('preview').innerHTML = rows.length
-    ? renderBoard({ template, palette: pal, rows, title: theme.name, idPrefix: 'pv' })
+    ? renderBoard({ template, palette: pal, rows, title: cfg.title || theme.name, idPrefix: 'pv' })
     : '<p style="position:absolute;inset:0;display:grid;place-items:center;margin:0;color:#aaa">Turn on a row to see it here.</p>';
 
-  // Close-ups: a few posters at full size plus one widescreen card.
+  // Close-ups: a few posters at full size plus one widescreen card. Image URLs
+  // can come from a shared link, so they go through the DOM, never into HTML.
+  const tile = (url, art) => (url ? h('div', {}, h('img', { src: url, alt: '' })) : h('div', { html: art() }));
   const posterRow = resolveRows(cfg).find((r) => r.shape !== 'landscape');
   const wideRow = resolveRows(cfg).find((r) => r.shape === 'landscape');
   const tiles = [];
   if (posterRow) {
     itemsFor(posterRow, cfg).slice(0, 4).forEach((item, i) => {
-      const url = imageFor(cfg, posterRow, item);
-      tiles.push(h('div', { html: url ? `<img src="${url}" alt="">` : renderArt({ template, palette: pal, item, shape: posterRow.shape === 'square' ? 'square' : 'poster', idPrefix: `cu${i}` }) }));
+      tiles.push(tile(imageFor(cfg, posterRow, item),
+        () => renderArt({ template, palette: pal, item, shape: posterRow.shape === 'square' ? 'square' : 'poster', idPrefix: `cu${i}` })));
     });
   }
   if (wideRow) {
     const item = itemsFor(wideRow, cfg)[0];
-    if (item) {
-      const url = imageFor(cfg, wideRow, item);
-      tiles.push(h('div', { html: url ? `<img src="${url}" alt="">` : renderArt({ template, palette: pal, item, shape: 'landscape', idPrefix: 'cuw' }) }));
-    }
+    if (item) tiles.push(tile(imageFor(cfg, wideRow, item), () => renderArt({ template, palette: pal, item, shape: 'landscape', idPrefix: 'cuw' })));
   }
   $('closeups').replaceChildren(...tiles);
   renderInstall(cfg);
@@ -168,65 +170,92 @@ function render() {
 
 // --- Install, export and share ----------------------------------------------------------------
 function installButtons(manifest, qrText) {
-  return h('div', { class: 'install-grid' },
-    h('div', {},
-      h('div', { class: 'btn-row' },
-        h('a', { class: 'btn small', href: stremioLink(manifest) }, 'Install in Stremio'),
-        h('a', { class: 'btn small ghost', href: webInstallLink(manifest), target: '_blank', rel: 'noopener' }, 'Stremio Web')),
-      h('div', { class: 'url-box' }, h('code', {}, manifest),
-        h('button', { class: 'btn small ghost', type: 'button', onclick: () => copyText(manifest, 'Install link') }, 'Copy')),
-      h('p', { class: 'hint' }, 'Install from any device signed in to your Stremio account; it syncs to your TV.')),
-    h('figure', { class: 'qr-card', style: 'margin:0', html: qrSvg(qrText) }));
+  const main = h('div', {},
+    h('div', { class: 'btn-row' },
+      h('a', { class: 'btn small', href: stremioLink(manifest) }, 'Install in Stremio'),
+      h('a', { class: 'btn small ghost', href: webInstallLink(manifest), target: '_blank', rel: 'noopener' }, 'Stremio Web')),
+    h('div', { class: 'url-box' }, h('code', {}, manifest),
+      h('button', { class: 'btn small ghost', type: 'button', onclick: () => copyText(manifest, 'Install link') }, 'Copy')),
+    h('p', { class: 'hint' }, 'Install from any device signed in to your Stremio account; it syncs to your TV.'));
+  return qrText ? h('div', { class: 'install-grid' }, main, h('figure', { class: 'qr-card', style: 'margin:0', html: qrSvg(qrText) })) : main;
 }
 
-function serverField() {
-  const input = h('input', { type: 'url', value: server, placeholder: 'https://your-marquee.example.com', 'aria-label': 'Your Marquee server URL' });
-  input.addEventListener('change', () => {
-    server = input.value.trim().replace(/\/+$/, '');
-    if (server && !/^https:\/\//.test(server) && !/^http:\/\/(127\.0\.0\.1|localhost)/.test(server)) toast('Stremio needs an https:// address');
-    store.set('server', server);
-    schedule();
-  });
-  return h('label', { class: 'field', style: 'margin-top:12px' }, 'Your Marquee server', input);
+// Publishing: the Studio can't write to GitHub itself, so it opens GitHub's
+// "new file" page pre-filled with presets/<slug>.json for you to commit.
+const RESERVED = new Set(THEMES.flatMap((t) => [t.id, `${t.id}-classic`]));
+const slugify = (s) => String(s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '')
+  .replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
+const repoOk = (r) => /^[\w.-]+\/[\w.-]+$/.test(r);
+function pagesBase(repo) {
+  if (repo.toLowerCase() === String(info.repo || '').toLowerCase()) return info.base;
+  const [owner, name] = repo.split('/');
+  return name.toLowerCase() === `${owner.toLowerCase()}.github.io` ? `https://${name.toLowerCase()}` : `https://${owner.toLowerCase()}.github.io/${name}`;
+}
+
+function updatePublish(cfg) {
+  const repo = $('pub-repo').value.trim() || info.repo || 'Griffdog21/stremio-marquee';
+  const fallback = slugify(cfg.title) || `my-${cfg.theme}`;
+  $('pub-slug').placeholder = fallback;
+  const slug = slugify($('pub-slug').value) || fallback;
+  const out = $('pub-result');
+  if (!repoOk(repo)) return out.replaceChildren(h('p', { class: 'error' }, 'Enter the repository as owner/name, e.g. you/stremio-marquee.'));
+  if (RESERVED.has(slug)) return out.replaceChildren(h('p', { class: 'error' }, `“${slug}” belongs to a stock theme; pick another address.`));
+  const branch = info.branch || 'main';
+  const file = `${JSON.stringify(exportConfig(cfg), null, 2)}\n`;
+  const existing = repo.toLowerCase() === String(info.repo || '').toLowerCase() && publishedSlugs.has(slug);
+  let link = `https://github.com/${repo}/new/${branch}/presets?filename=${encodeURIComponent(`${slug}.json`)}&value=${encodeURIComponent(file)}`;
+  const tooLong = link.length > 7500; // very large setups: paste the JSON by hand
+  if (tooLong) link = `https://github.com/${repo}/new/${branch}/presets?filename=${encodeURIComponent(`${slug}.json`)}`;
+  if (existing) link = `https://github.com/${repo}/edit/${branch}/presets/${slug}.json`;
+  const manifest = `${pagesBase(repo)}/addon/${slug}/manifest.json`;
+  out.replaceChildren(
+    h('div', { class: 'btn-row', style: 'margin-top:12px' },
+      h('a', { class: 'btn small', href: link, target: '_blank', rel: 'noopener' }, existing ? 'Update on GitHub' : 'Publish with GitHub'),
+      h('button', { class: 'btn small ghost', type: 'button', onclick: () => copyText(file, 'Preset JSON') }, 'Copy JSON')),
+    existing || tooLong
+      ? h('p', { class: 'hint' }, existing ? `“${slug}” is already published: copy the JSON, paste it over the file on GitHub, and commit.` : 'This setup is too big to pre-fill: copy the JSON and paste it into the new file before committing.')
+      : null,
+    h('p', { class: 'hint' }, 'Once the build finishes (about two minutes after committing), install it here:'),
+    installButtons(manifest));
+}
+
+function updateServer(cfg, token) {
+  const out = $('server-result');
+  if (!server) return out.replaceChildren();
+  out.replaceChildren(h('p', { class: 'hint' }, `Served live by ${new URL(server).host}:`), installButtons(`${server}/${token}/manifest.json`));
 }
 
 function renderInstall(cfg) {
   const token = encodeConfig(cfg);
-  const preset = token === encodeConfig({ theme: cfg.theme });
   const theme = getTheme(cfg.theme);
-  const body = $('install-body');
-  const share = `${location.origin}${location.pathname}#cfg=${token}${server ? `&server=${encodeURIComponent(server)}` : ''}`;
-  $('share-url').textContent = share;
+  $('share-url').textContent = `${location.origin}${location.pathname}#cfg=${token}${server ? `&server=${encodeURIComponent(server)}` : ''}`;
 
-  if (preset) {
-    const manifest = presetManifest(info.base, cfg.theme);
-    body.replaceChildren(
-      h('p', {}, h('b', {}, `This is the stock ${theme.name} theme.`), ' It\'s hosted free on GitHub Pages and refreshed daily, with nothing to run.'),
-      installButtons(manifest, `${info.base}/?theme=${cfg.theme}#install`));
+  // Stock designs (with generated art or real posters) are already hosted.
+  const real = token === encodeConfig({ theme: cfg.theme, art: 'original' });
+  const stock = real || token === encodeConfig({ theme: cfg.theme });
+  $('install-stock').hidden = !stock;
+  $('install-custom').hidden = stock;
+  if (stock) {
+    $('install-stock').replaceChildren(
+      h('p', {}, h('b', {}, `This is the stock ${theme.name} theme${real ? ' with real posters' : ''}.`), ' It\'s hosted free and refreshed daily, with nothing to set up. Change anything and it becomes your own add-on.'),
+      installButtons(presetManifest(info.base, cfg.theme, real), `${info.base}/?theme=${cfg.theme}${real ? '&posters=real' : ''}#install`));
     return;
   }
-  if (server) {
-    const manifest = `${server}/${token}/manifest.json`;
-    body.replaceChildren(
-      h('p', {}, h('b', {}, 'Your custom setup'), ` is served by ${new URL(server).host}.`),
-      installButtons(manifest, share),
-      serverField());
-    return;
-  }
-  const vercel = `https://vercel.com/new/clone?repository-url=${encodeURIComponent(REPO)}&project-name=marquee`;
-  const renderCom = `https://render.com/deploy?repo=${REPO}`;
-  body.replaceChildren(
-    h('div', { class: 'callout' },
-      h('b', {}, 'Custom setups need a Marquee server. '),
-      'The eight stock themes are static files, but your own colours, images and rows are rendered live. Deploy your own free copy in a minute, then paste its address below.'),
-    h('div', { class: 'deploy' },
-      h('a', { class: 'btn small', href: vercel, target: '_blank', rel: 'noopener' }, '▲ Deploy to Vercel'),
-      h('a', { class: 'btn small ghost', href: renderCom, target: '_blank', rel: 'noopener' }, 'Deploy to Render'),
-      h('a', { class: 'btn small ghost', href: `${REPO}#self-hosting`, target: '_blank', rel: 'noopener' }, 'Docker / other')),
-    serverField(),
-    h('p', { class: 'hint' }, 'Or install the stock theme it\'s based on: ',
-      h('a', { href: stremioLink(presetManifest(info.base, cfg.theme)) }, `${theme.name} preset`), '.'));
+  updatePublish(cfg);
+  updateServer(cfg, token);
 }
+
+$('pub-repo').addEventListener('input', () => updatePublish(current()));
+$('pub-slug').addEventListener('input', () => updatePublish(current()));
+$('server-url').addEventListener('change', () => {
+  server = $('server-url').value.trim().replace(/\/+$/, '');
+  if (server && !/^https:\/\//.test(server) && !/^http:\/\/(127\.0\.0\.1|localhost)/.test(server)) toast('Stremio needs an https:// address');
+  store.set('server', server);
+  schedule();
+});
+$('deploy-vercel').href = `https://vercel.com/new/clone?repository-url=${encodeURIComponent(REPO)}&project-name=marquee`;
+$('deploy-render').href = `https://render.com/deploy?repo=${REPO}`;
+$('deploy-other').href = `${REPO}#-custom-setups`;
 
 $('dl-enhanced').addEventListener('click', () => {
   const cfg = current();
@@ -415,6 +444,8 @@ $('add-collection').addEventListener('click', () => {
 });
 
 function buildImages() {
+  $('title').value = state.title || '';
+  $('title').placeholder = `Marquee · ${getTheme(state.theme).name} (custom)`;
   $('logo').value = state.logo;
   $('background').value = state.background;
   $('swaps').replaceChildren(...Object.entries(state.posters).map(([id, url]) => {
@@ -427,6 +458,7 @@ function buildImages() {
       h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Remove swap', onclick: () => { const { [id]: _, ...rest } = state.posters; state.posters = rest; buildImages(); schedule(); } }, '×'));
   }));
 }
+$('title').addEventListener('input', (e) => { state.title = e.target.value; schedule(); });
 $('logo').addEventListener('change', (e) => { state.logo = e.target.value.trim(); schedule(); });
 $('background').addEventListener('change', (e) => { state.background = e.target.value.trim(); schedule(); });
 let swapTimer;
@@ -437,7 +469,8 @@ $('swap-search').addEventListener('input', () => {
     $('swap-results').replaceChildren(...resultList(found, (m) => {
       const url = window.prompt(`Image URL to use as the poster for "${m.name}":`, '');
       if (!url) return;
-      if (!/^https?:\/\//.test(url.trim())) return toast('That needs to be an http(s) image URL');
+      // Stremio Web blocks plain-http images, so insist on https.
+      if (!/^https:\/\//.test(url.trim())) return toast('Use an https:// image URL so it shows on every device');
       metaCache.set(m.id, m);
       state.posters = { ...state.posters, [m.id]: url.trim() };
       $('swap-search').value = '';
@@ -470,6 +503,12 @@ async function detectServer() {
   }
 }
 
-server = (await detectServer()) || store.get('server', '');
+const detected = await detectServer();
+server = detected || store.get('server', '');
+$('server-url').value = server;
+$('server-details').open = Boolean(detected);
+$('pub-repo').value = info.repo || 'Griffdog21/stremio-marquee';
+// Arriving from a published add-on's Configure button pre-fills its address.
+$('pub-slug').value = new URLSearchParams(location.hash.slice(1)).get('slug') || '';
 Object.keys(state.posters).forEach((id) => ensureMeta(id, 'movie'));
 buildAll();
