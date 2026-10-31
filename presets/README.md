@@ -24,7 +24,6 @@ Only `theme` is required; everything else falls back to that theme's defaults.
   "theme": "haunt",
   "template": "noir",
   "colors": { "primary": "#ff7518" },
-  "art": "art",
   "rows": ["spotlight", "custom0", "movies", "series", "mood"],
   "names": { "movies": "Hot Right Now" },
   "shapes": { "series": "landscape" },
@@ -41,7 +40,7 @@ Only `theme` is required; everything else falls back to that theme's defaults.
 | `theme` | `neon`, `noir`, `deco`, `vhs`, `bauhaus`, `terminal`, `haunt` or `aurora` |
 | `template` | Draw posters in another theme's style |
 | `colors` | Override palette colours: `bg`, `surface`, `primary`, `secondary`, `accent`, `text`, `muted` |
-| `art` | `"art"` for generated posters, `"original"` for real posters |
+| `art` | Leave out for real posters (default); `"art"` draws every poster in the theme's style |
 | `rows` | Rows in order: `spotlight`, `movies`, `series`, `mood`, `fresh`, `custom0`…`custom5` |
 | `names` / `shapes` | Per-row name, and card shape: `poster`, `landscape` or `square` |
 | `prefix` | Emoji or symbol before row names (`""` for none) |

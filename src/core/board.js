@@ -58,7 +58,8 @@ export function renderBoard({ template, palette, rows, width = 1280, height = 72
     const cw = wide ? ch / 0.5625 : square ? ch : ch / 1.5;
     const gap = 18 * sc;
     // Stremio appends the type to every row title ("Trending - Movie").
-    const suffix = row.type ? `<tspan fill="${p.muted}"> - ${row.type === 'series' ? 'Series' : 'Movie'}</tspan>` : '';
+    // (A non-breaking space: renderers drop a span's leading plain space.)
+    const suffix = row.type ? `<tspan fill="${p.muted}"> - ${row.type === 'series' ? 'Series' : 'Movie'}</tspan>` : '';
     s += `<text x="${n(sx)}" y="${n(y + 20 * sc)}" font-family="${uiFamily}" font-weight="${ui.weight}" font-size="${n(21 * sc)}" fill="${p.text}">${esc(row.name)}${suffix}</text>`;
     const label = 'SEE ALL';
     s += `<text x="${n(width - 40 * sc)}" y="${n(y + 20 * sc)}" font-family="${uiFamily}" font-weight="${ui.weight}" font-size="${n(13 * sc)}" text-anchor="end" letter-spacing="${n(1.5 * sc)}" fill="${p.primary}">${label}</text>`;

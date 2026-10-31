@@ -6,7 +6,7 @@ test('defaults are sane', () => {
   const cfg = normalizeConfig({});
   assert.equal(cfg.theme, 'neon');
   assert.deepEqual(cfg.rows, DEFAULTS.rows);
-  assert.equal(cfg.art, 'art');
+  assert.equal(cfg.art, 'original', 'real posters unless theme art is chosen');
   assert.equal(cfg.count, 40);
 });
 

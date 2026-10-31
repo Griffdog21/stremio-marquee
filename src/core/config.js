@@ -13,7 +13,7 @@ export const DEFAULTS = Object.freeze({
   theme: 'neon',
   template: null, // null = the theme's own art style
   colors: {}, // palette overrides, e.g. { primary: '#ff00aa' }
-  art: 'art', // 'art' = generated posters, 'original' = Cinemeta's own posters
+  art: 'original', // 'original' = real posters (art only where one is missing), 'art' = theme art on every card
   rows: DEFAULT_ROWS,
   shapes: {}, // per-row card shape overrides
   names: {}, // per-row display names
@@ -61,7 +61,7 @@ export function normalizeConfig(input = {}) {
   cfg.colors = {};
   for (const k of PALETTE_KEYS) if (isHex(src.colors?.[k])) cfg.colors[k] = src.colors[k].toLowerCase();
 
-  cfg.art = src.art === 'original' ? 'original' : 'art';
+  cfg.art = src.art === 'art' ? 'art' : 'original';
 
   cfg.custom = (Array.isArray(src.custom) ? src.custom : []).slice(0, LIMITS.custom).map((c, i) => ({
     name: clampStr(c?.name, LIMITS.name) || `Collection ${i + 1}`,

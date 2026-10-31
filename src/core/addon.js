@@ -73,8 +73,9 @@ export function addonKey({ cfg, variant = 'stock', slug = '', token = '' }) {
 
 export function defaultName(cfg, variant = 'stock') {
   const theme = getTheme(cfg.theme);
-  if (variant === 'stock') return `Marquee · ${theme.name}`;
-  if (variant === 'classic') return `Marquee · ${theme.name} · Real posters`;
+  // Real posters are the default edition; theme art is the opt-in one.
+  if (variant === 'stock') return `Marquee · ${theme.name} · Theme art`;
+  if (variant === 'classic') return `Marquee · ${theme.name}`;
   return `Marquee · ${theme.name} (custom)`;
 }
 

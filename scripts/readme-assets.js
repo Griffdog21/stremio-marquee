@@ -14,6 +14,8 @@ import { svgToPng } from '../src/node/render.js';
 import { encode } from '../src/node/encode.js';
 import { meta, catalog } from '../src/node/cinemeta.js';
 import { COLLECTIONS, mapLimit } from '../src/node/sources.js';
+import { checkImages, embedImages } from '../src/node/images.js';
+import { realImage } from '../src/core/addon.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = (f) => path.join(root, 'docs', f);
@@ -151,6 +153,11 @@ async function main() {
       { name: 'Trending', type: 'movie', shape: 'poster', items: movies.slice(0, 8) },
       { name: 'Trending', type: 'series', shape: 'poster', items: series.slice(0, 8) },
     ];
+    // Real posters, as the default edition shows them (theme art only fills gaps).
+    const urls = rows.flatMap((r) => r.items.map((it) => realImage(it, r.shape)));
+    const ok = await checkImages(urls);
+    const embedded = await embedImages(urls.filter((u) => u && ok(u)));
+    for (const r of rows) r.imageFor = (it) => embedded(realImage(it, r.shape));
     const board = renderBoard({ template: t.template, palette: t.palette, rows, title: t.name, idPrefix: t.id });
     writeFileSync(out(`themes/${t.id}.jpg`), await encode(svgToPng(board, { width: 960 })));
     console.log(`themes/${t.id}.jpg`);

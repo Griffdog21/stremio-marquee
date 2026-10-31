@@ -18,7 +18,7 @@ test('core version matches package.json', () => {
 test('every stock manifest and its real-poster twin pass the official Stremio linter', () => {
   const ids = new Set();
   for (const t of THEMES) {
-    for (const [variant, cfg] of [['stock', normalizeConfig({ theme: t.id })], ['classic', normalizeConfig({ theme: t.id, art: 'original' })]]) {
+    for (const [variant, cfg] of [['stock', normalizeConfig({ theme: t.id, art: 'art' })], ['classic', normalizeConfig({ theme: t.id })]]) {
       const manifest = buildManifest({ cfg, base: `https://example.com/addon/${t.id}`, variant, ext: 'jpg' });
       const result = linter.lintManifest(manifest);
       assert.ok(result.valid, `${t.id}/${variant}: ${JSON.stringify(result.errors)}`);
@@ -62,7 +62,7 @@ test('metas: generated art, original posters and per-title swaps', () => {
   ];
   const row = { id: 'movies', type: 'movie', shape: 'poster' };
   const artUrl = (it, shape) => `https://art/${shape}/${it.id}.jpg`;
-  const generated = toMetas({ row, items, cfg: normalizeConfig({ posters: { tt0111161: 'https://mine/shawshank.png' } }), artUrl });
+  const generated = toMetas({ row, items, cfg: normalizeConfig({ art: 'art', posters: { tt0111161: 'https://mine/shawshank.png' } }), artUrl });
   assert.equal(generated[0].poster, 'https://art/poster/tt0083658.jpg');
   assert.equal(generated[1].poster, 'https://mine/shawshank.png');
   assert.equal(generated[0].imdbRating, '8.1');

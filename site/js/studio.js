@@ -231,8 +231,8 @@ function renderInstall(cfg) {
   $('share-url').textContent = `${location.origin}${location.pathname}#cfg=${token}${server ? `&server=${encodeURIComponent(server)}` : ''}`;
 
   // Stock designs (with generated art or real posters) are already hosted.
-  const real = token === encodeConfig({ theme: cfg.theme, art: 'original' });
-  const stock = real || token === encodeConfig({ theme: cfg.theme });
+  const real = token === encodeConfig({ theme: cfg.theme });
+  const stock = real || token === encodeConfig({ theme: cfg.theme, art: 'art' });
   $('install-stock').hidden = !stock;
   $('install-custom').hidden = stock;
   if (stock) {

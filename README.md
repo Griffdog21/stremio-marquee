@@ -23,15 +23,12 @@
 
 ---
 
-<p align="center"><img src="docs/gallery.jpg" alt="Blade Runner drawn by all eight Marquee themes" width="100%"></p>
-<p align="center"><sub>Optional theme art: one title in eight styles, generated from scratch (no studio artwork). Off by default; Marquee keeps your real posters unless you switch it on.</sub></p>
-
 ## ✨ What Marquee does
 
 Stremio add-ons can't repaint the app itself, but they **can** fill your home screen with rows, posters, images and text. Marquee turns that into a theme engine:
 
-- 🎨 **Optional generated poster art** in eight distinct styles, rendered as plain JPEGs so every Stremio app shows them, from Google TV and Android TV to iOS, desktop and web.
-- 🖼️ **Real posters by default**: every theme comes as a real-poster edition (the default on the site) with the official artwork in a sharper size; generated art only fills in for titles that have no poster.
+- 🖼️ **Your real posters, always**: Marquee keeps the official artwork (in a sharper size than Stremio's default) and never replaces it, except for the rare title that has no poster.
+- 🎨 **Optional theme art**: if you want it, a second edition of each theme draws every poster in the theme's style ([see below](#-optional-theme-art)).
 - 🎬 **Widescreen spotlight rows**: a cinematic, Netflix-style hero row of 16:9 cards built from each theme's hand-picked collection.
 - 🎞️ **Curated collections** per theme (*Neon Nights*, *Shadows & Smoke*, *Midnight Monsters*…) plus a genre **mood row**.
 - 🧑‍🎨 **The Studio**: mix any palette with any art style, rename and reshape rows, name your add-on, swap in your **own poster images**, set your own logo and backdrop, build rows from your favourite titles, and watch it all live on a virtual TV. Then **publish it free** to GitHub Pages, no server required.
@@ -60,20 +57,27 @@ Stremio add-ons can't repaint the app itself, but they **can** fill your home sc
   </tr>
 </table>
 
+## 🎨 Optional: theme art
+
+Every theme also comes in a **Theme art** edition that redraws each poster in the theme's style, generated from scratch from the title, year, genres and rating (no studio artwork). It's **off unless you choose it**: flip the switch in the site's Install panel, or install `…/addon/<id>/manifest.json` instead of `…/addon/<id>-classic/manifest.json`.
+
+<p align="center"><img src="docs/gallery.jpg" alt="Blade Runner drawn by all eight Marquee themes" width="100%"></p>
+<p align="center"><sub>One title, eight styles: what the optional Theme art editions look like.</sub></p>
+
 ## 📺 Install on Google TV (or anything else)
 
 Add-ons live in your **Stremio account**, so you install once, on any device, and they sync everywhere you're signed in.
 
-1. On your **phone or computer**, open **[griffdog21.github.io/stremio-marquee](https://griffdog21.github.io/stremio-marquee/)**, pick a theme, keep **Real posters** (the default) or switch to **Generated art**, and tap **Install in Stremio** (or **Install via Stremio Web** if you don't have the app on that device). You can also scan the QR code from the site with your phone.
+1. On your **phone or computer**, open **[griffdog21.github.io/stremio-marquee](https://griffdog21.github.io/stremio-marquee/)**, pick a theme (real posters are the default; theme art is optional), and tap **Install in Stremio** (or **Install via Stremio Web** if you don't have the app on that device). You can also scan the QR code from the site with your phone.
 2. Open Stremio on your **Google TV**, signed in to the same account. Marquee's rows appear on the home screen; restart the app if it was already open.
 3. **Make it your home screen:** new add-ons land below Stremio's built-in rows. Open **[Lineup](https://griffdog21.github.io/stremio-marquee/lineup.html)** → **Marquee to the top** → **Hide Cinemeta's rows** (search keeps working) → **Save**.
 
 <details>
 <summary><b>Manifest URLs</b> (paste into Stremio → Add-ons → search box)</summary>
 
-Every theme lives at `https://griffdog21.github.io/stremio-marquee/addon/<id>/manifest.json`, and its real-poster edition at `…/addon/<id>-classic/manifest.json`.
+Each theme's default (real posters) lives at `https://griffdog21.github.io/stremio-marquee/addon/<id>-classic/manifest.json`; the optional theme-art edition at `…/addon/<id>/manifest.json`.
 
-| Theme | `<id>` | Generated art | Real posters |
+| Theme | `<id>` | Theme art (optional) | Real posters (default) |
 | --- | --- | --- | --- |
 | 🌆 Midnight Neon | `neon` | [manifest](https://griffdog21.github.io/stremio-marquee/addon/neon/manifest.json) | [manifest](https://griffdog21.github.io/stremio-marquee/addon/neon-classic/manifest.json) |
 | 🎞️ Film Noir | `noir` | [manifest](https://griffdog21.github.io/stremio-marquee/addon/noir/manifest.json) | [manifest](https://griffdog21.github.io/stremio-marquee/addon/noir-classic/manifest.json) |
@@ -95,7 +99,7 @@ Every theme lives at `https://griffdog21.github.io/stremio-marquee/addon/<id>/ma
 | Curated collections + mood rows | ✅ | ✅ | ✅ | ✅ |
 | Your own posters, logo & backdrop (Studio) | ✅ | ✅ | ✅ | ✅ |
 | Row order / hidden rows (Lineup) | ✅ | ✅ | ✅ | ✅ |
-| Real-poster editions | ✅ | ✅ | ✅ | ✅ |
+| Optional theme-art editions | ✅ | ✅ | ✅ | ✅ |
 | App colours, fonts, focus glow | — | — | ✅ via Stremio Enhanced | ✅ via Stylus |
 
 > **Why no app colours on TV?** Stremio add-ons speak a data protocol (catalogs, metadata, streams, subtitles); there's no way for an add-on to inject styles into the app. Marquee themes everything an add-on *can* reach, and ships real CSS themes where Stremio accepts them.

@@ -16,7 +16,7 @@ import path from 'node:path';
 import { THEMES, getTheme } from '../src/core/themes.js';
 import { normalizeConfig, encodeConfig } from '../src/core/config.js';
 import { buildManifest, resolveRows, toMetas, realImage, defaultName, SHAPE_CODES } from '../src/core/addon.js';
-import { checkImages } from '../src/node/images.js';
+import { checkImages, embedImages } from '../src/node/images.js';
 import { renderArt, renderLogo, renderBackdrop } from '../src/core/art/index.js';
 import { renderBoard } from '../src/core/board.js';
 import { enhancedTheme, stylusTheme } from '../src/core/css-theme.js';
@@ -156,14 +156,21 @@ async function buildAddon({ pool, jobs, name, cfg, variant, slug = '', assetsFro
   const studio = `../../../studio.html${configure}`;
   write(`${dir}/configure/index.html`, `<!doctype html><meta charset="utf-8"><title>Configure Marquee</title><meta http-equiv="refresh" content="0; url=${studio}"><a href="${studio}">Open the Marquee Studio</a>`);
 
-  // A TV-style preview of the home screen for the website and README.
-  // (Row names without the emoji: resvg has no colour emoji font.)
+  // A TV-style preview of the home screen for the website and README, with
+  // the same images Stremio will show. (Row names without the emoji: resvg
+  // has no colour emoji font.)
   if (preview) {
     const rows = loaded
       .filter(({ items }) => items.length)
       .slice(0, 3)
       .map(({ row, items }) => ({ name: row.name, type: row.type, shape: row.shape, items: items.slice(0, 8) }));
-    jobs.push(pool.run(renderBoard({ template, palette, rows, title: cfg.title || theme.name, idPrefix: name.replace(/\W/g, '') }), path.join(DIST, `previews/${name}.${IMAGE_EXT}`)));
+    if (cfg.art === 'original') {
+      const urls = rows.flatMap((r) => r.items.map((it) => realImage(it, r.shape)));
+      const hasImage = await checkImages(urls);
+      const embedded = await embedImages(urls.filter((u) => u && hasImage(u)));
+      for (const r of rows) r.imageFor = (it) => cfg.posters[it.id] ? null : embedded(realImage(it, r.shape));
+    }
+    jobs.push(pool.run(renderBoard({ template, palette, rows, title: cfg.title || theme.name, idPrefix: name.replace(/\W/g, '') }), path.join(DIST, `previews/${preview}.${IMAGE_EXT}`)));
   }
   log(`${name}: ${loaded.reduce((a, l) => a + l.items.length, 0)} titles, ${seen.size} artworks queued`);
   return { loaded, manifest: `${base}/manifest.json` };
@@ -181,13 +188,14 @@ async function buildAddons() {
   });
 
   for (const theme of themes) {
-    const cfg = normalizeConfig({ theme: theme.id });
-    const art = await buildAddon({ pool, jobs, name: theme.id, cfg, variant: 'stock', configure: `?theme=${theme.id}`, preview: true });
-    // The same rows with real posters and backdrops: nothing extra to render.
-    const classicCfg = normalizeConfig({ theme: theme.id, art: 'original' });
+    const cfg = normalizeConfig({ theme: theme.id, art: 'art' });
+    // Addresses predate real posters becoming the default, so they stay put:
+    // addon/<id>/ is the theme-art edition, addon/<id>-classic/ the default.
+    const art = await buildAddon({ pool, jobs, name: theme.id, cfg, variant: 'stock', configure: `#cfg=${encodeConfig(cfg)}`, preview: `${theme.id}-art` });
+    const classicCfg = normalizeConfig({ theme: theme.id });
     const classic = await buildAddon({
       pool, jobs, name: `${theme.id}-classic`, cfg: classicCfg, variant: 'classic', assetsFrom: theme.id,
-      configure: `#cfg=${encodeConfig(classicCfg)}`,
+      configure: `?theme=${theme.id}`, preview: theme.id,
     });
     for (const { row, items } of art.loaded) {
       if (row.id === 'movies' && !sample.movies.length) sample.movies = items.slice(0, 16).map(slim);
@@ -205,7 +213,7 @@ async function buildAddons() {
   for (const { slug, cfg } of presets) {
     const token = encodeConfig(cfg);
     const built = await buildAddon({
-      pool, jobs, name: slug, cfg, variant: 'preset', slug, configure: `#cfg=${token}&slug=${slug}`, preview: true,
+      pool, jobs, name: slug, cfg, variant: 'preset', slug, configure: `#cfg=${token}&slug=${slug}`, preview: slug,
     });
     addons.custom.push({ slug, name: cfg.title || defaultName(cfg, 'preset'), theme: cfg.theme, manifest: built.manifest });
   }

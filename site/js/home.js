@@ -21,7 +21,7 @@ for (const t of THEMES) {
     h('button', { class: 'card-select', type: 'button', 'aria-label': `Preview ${t.name}`, onclick: () => select(t.id, true) }),
     october && t.id === 'haunt' ? h('span', { class: 'badge' }, 'Halloween pick') : null,
     h('div', { class: 'card-shot' },
-      h('img', { src: `previews/${t.id}.${ext}`, alt: `${t.name} theme on a Stremio home screen`, loading: 'lazy', width: 1280, height: 720 })),
+      h('img', { 'data-theme': t.id, src: `previews/${t.id}.${ext}`, alt: `${t.name} theme on a Stremio home screen`, loading: 'lazy', width: 1280, height: 720 })),
     h('div', { class: 'card-body' },
       h('h3', {}, `${t.emoji} ${t.name}`),
       h('p', {}, t.tagline),
@@ -33,37 +33,13 @@ for (const t of THEMES) {
 }
 
 // --- TV preview -------------------------------------------------------------------------
-// Generated art uses the pre-rendered screenshot; real posters are drawn live
-// from the same sample rows so the preview matches what installs.
-const metahub = (kind, id) => `https://images.metahub.space/${kind}/medium/${id}/img`;
-let realData;
-async function realPosterBoard(id) {
-  realData ??= Promise.all([import('../core/board.js'), json('data/sample.json'), json('data/collections.json')]);
-  const [{ renderBoard }, sample, collections] = await realData;
-  const theme = getTheme(id);
-  const poster = (it) => (it.poster || metahub('poster', it.id)).replace('/poster/small/', '/poster/medium/');
-  const rows = [
-    { name: `${theme.emoji} ${theme.collection.name}`, type: 'movie', shape: 'landscape', items: (collections?.[theme.collection.id] || []).slice(0, 6), imageFor: (it) => metahub('background', it.id) },
-    { name: `${theme.emoji} Trending`, type: 'movie', shape: 'poster', items: sample?.movies?.slice(0, 8) || [], imageFor: poster },
-    { name: `${theme.emoji} Trending`, type: 'series', shape: 'poster', items: sample?.series?.slice(0, 8) || [], imageFor: poster },
-  ].filter((r) => r.items.length);
-  return renderBoard({ template: theme.template, palette: theme.palette, rows, title: theme.name, idPrefix: `rp${id}` });
-}
+// Pre-rendered home screens: previews/<id> shows real posters, <id>-art theme art.
+const previewOf = (id) => `previews/${id}${real ? '' : '-art'}.${ext}`;
 
-let tvRequest = 0;
-async function showOnTv(id) {
-  const ticket = ++tvRequest;
+function showOnTv(id) {
   const screen = $('tv-screen');
-  let layer;
-  if (real) {
-    const svg = await realPosterBoard(id);
-    if (ticket !== tvRequest) return;
-    layer = h('div', { class: 'layer', style: 'opacity:0', html: svg, role: 'img', 'aria-label': `${getTheme(id).name} with real posters on a Stremio home screen` });
-    requestAnimationFrame(() => { layer.style.opacity = '1'; });
-  } else {
-    layer = h('img', { class: 'layer', src: `previews/${id}.${ext}`, alt: `${getTheme(id).name} on a Stremio home screen`, style: 'opacity:0' });
-    layer.addEventListener('load', () => requestAnimationFrame(() => { layer.style.opacity = '1'; }));
-  }
+  const layer = h('img', { class: 'layer', src: previewOf(id), alt: `${getTheme(id).name} on a Stremio home screen`, style: 'opacity:0' });
+  layer.addEventListener('load', () => requestAnimationFrame(() => { layer.style.opacity = '1'; }));
   screen.append(layer);
   setTimeout(() => [...screen.children].forEach((x) => x !== layer && x.classList.contains('layer') && x.remove()), 900);
 }
@@ -85,6 +61,7 @@ function select(id, jump = false) {
     ? `The official posters, with ${theme.name}'s rows, collection and widescreen spotlight. Generated art only fills in where a title has no poster.`
     : 'Every poster drawn in the theme\'s style.';
   document.querySelectorAll('.card-install').forEach((a) => { a.href = stremioLink(presetManifest(info.base, a.dataset.theme, real)); });
+  document.querySelectorAll('.card-shot img[data-theme]').forEach((img) => { img.src = previewOf(img.dataset.theme); });
   showOnTv(id);
 
   const manifest = presetManifest(info.base, id, real);
@@ -137,18 +114,18 @@ async function buildMine() {
   }
 }
 
-// --- Poster wall: the same three trending titles, drawn by all eight themes ------------
+// --- Poster wall: real posters from each theme's mood row ------------------------------
 async function buildWall() {
   const wall = $('wall');
   wall.classList.add('wall');
   const lists = await Promise.all(THEMES.map((t) =>
-    json(`addon/${t.id}/catalog/movie/mq-movies.json`).then((j) => j?.metas.slice(0, 3) || [])));
+    json(`addon/${t.id}-classic/catalog/movie/mq-mood.json`).then((j) => j?.metas.slice(0, 3) || [])));
   for (let row = 0; row < 3; row++) {
     THEMES.forEach((t, col) => {
       const meta = lists[col][row];
       // Catalog URLs are absolute (Stremio needs that); load them relative to this page.
       const src = meta?.poster.startsWith(`${info.base}/`) ? meta.poster.slice(info.base.length + 1) : meta?.poster;
-      if (meta) wall.append(h('img', { src, alt: `${meta.name} in the ${t.name} theme`, loading: 'lazy' }));
+      if (meta) wall.append(h('img', { src, alt: `${meta.name} (${t.name})`, loading: 'lazy' }));
     });
   }
 }
