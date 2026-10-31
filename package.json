@@ -27,7 +27,7 @@
     "build:site": "node scripts/build.js --site-only",
     "start": "node src/server/server.js",
     "serve": "node scripts/serve.js",
-    "test": "node --test test/",
+    "test": "node --test \"test/*.test.js\"",
     "metrics": "node scripts/font-metrics.js",
     "contact-sheet": "node scripts/contact-sheet.js",
     "collections": "node scripts/resolve-collections.js",
